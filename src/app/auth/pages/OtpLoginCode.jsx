@@ -7,6 +7,7 @@ import { FaChevronLeft } from "react-icons/fa6";
 import Logo from "../../../assets/images/Logo.svg";
 
 import { useAuthStore } from "../store/auth.store";
+import CircularProgress from "../../../shared/components/CircularProgress";
 
 const OtpLoginCode = () => {
   const navigate = useNavigate();
@@ -29,6 +30,9 @@ const OtpLoginCode = () => {
       return () => clearTimeout(t);
     }
   }, [phone, countryCode, navigate]);
+
+  const TOTAL_TIME = 60;
+  const percent = (timer / TOTAL_TIME) * 100;
 
   useEffect(() => {
     if (timer === 0) return;
@@ -107,7 +111,22 @@ const OtpLoginCode = () => {
               <label className="label">OTP</label>
 
               <span className="otp-timer">
-                {timer > 0 && <span className="spinner"></span>}
+                {timer > 0 && (
+                  <CircularProgress
+                    size={20}
+                    radius={8}
+                    strokeWidth={3}
+                    percent={percent}
+                    progressColor={
+                      percent > 60
+                        ? "#22c55e"
+                        : percent > 30
+                        ? "#f97316"
+                        : "#ef4444"
+                    }
+                  />
+                )}
+
                 <span>
                   {timer > 0
                     ? `00:${timer < 10 ? `0${timer}` : timer}`

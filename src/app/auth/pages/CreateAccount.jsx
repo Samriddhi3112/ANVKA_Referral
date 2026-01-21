@@ -9,9 +9,14 @@ import "react-phone-input-2/lib/style.css";
 
 const CreateAccount = () => {
   const navigate = useNavigate();
-  const { uploadedProfileUrl, uploadProfilePic, registerReferral, loading,     setProfilePic,
-    profilePic: selectedProfilePic, } =
-    useAuthStore();
+  const {
+    uploadedProfileUrl,
+    uploadProfilePic,
+    registerReferral,
+    loading,
+    setProfilePic,
+    profilePic: selectedProfilePic,
+  } = useAuthStore();
 
   const [form, setForm] = useState({
     fullName: "",
@@ -82,6 +87,12 @@ const CreateAccount = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+    console.log("nfrnf", uploadedProfileUrl);
+
+    if (!uploadedProfileUrl) {
+      toast.error("Please upload profile picture");
+      return;
+    }
 
     const payload = {
       fullName: form.fullName,
@@ -89,6 +100,7 @@ const CreateAccount = () => {
       phone: form.phone,
       countryCode: form.countryCode,
       password: form.password,
+      profilePicture: uploadedProfileUrl,
     };
 
     try {
@@ -96,7 +108,13 @@ const CreateAccount = () => {
       toast.success("Account created successfully");
       navigate("/");
     } catch (err) {
-      toast.error("Registration failed");
+      const message =
+        err?.message ||
+        err?.error ||
+        err?.response?.data?.message ||
+        "Registration failed";
+
+      toast.error(message);
     }
   };
 
@@ -110,29 +128,47 @@ const CreateAccount = () => {
             </figure>
           </div>
 
-          <div className="AvatarBox">
-            <figure>
+          <div className="avatar-box">
+            <figure className="avatar-figure">
               <img
                 src={
                   selectedProfilePic
                     ? URL.createObjectURL(selectedProfilePic)
                     : uploadedProfileUrl || DpUpload
                 }
-                className="profile-pic-icon"
+                className="profile-pic"
                 alt="Profile Upload"
               />
+              <label htmlFor="profileUpload" className="edit-icon">
+                ✎
+                <input
+                  id="profileUpload"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    setProfilePic(file);
+
+                    try {
+                      const url = await uploadProfilePic(file);
+                      toast.success("Profile picture uploaded!");
+                      console.log("Uploaded URL:", url);
+                    } catch {
+                      toast.error("Image upload failed");
+                    }
+                  }}
+                />
+              </label>
             </figure>
 
-            <div className="plus-btn">+</div>
-
-            <input
-              type="file"
-              className="upload-input"
-              accept="image/*"
-              onChange={(e) => setProfilePic(e.target.files[0])}
-            />
-
-            <button onClick={uploadProfilePic} disabled={loading}>
+            <button
+              className="upload-btn"
+              onClick={uploadProfilePic}
+              disabled={loading}
+            >
               {loading ? "Uploading..." : "Upload"}
             </button>
           </div>

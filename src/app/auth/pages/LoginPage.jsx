@@ -159,6 +159,7 @@ const LoginPage = () => {
                   inputClass="form-control"
                   containerClass="phone-input-container"
                   // style={{ width: "460px" }}
+                   inputStyle={{ width: "460px" }}
                 />
 
                 <div className="footer-login-pad">

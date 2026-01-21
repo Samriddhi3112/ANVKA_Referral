@@ -16,37 +16,44 @@ export const useAuthStore = create((set) => ({
   isAuthenticated: !!localStorage.getItem("token"),
   loading: false,
   error: null,
-  profilePic: null, 
-  uploadedProfileUrl: null, 
+  profilePic: null,
+  uploadedProfileUrl: null,
 
   setProfilePic: (file) => set({ profilePic: file }),
 
-  uploadProfilePic: async () => {
-    const { profilePic } = useAuthStore.getState();
+  uploadProfilePic: async (file) => {
+  const fileToUpload = file || useAuthStore.getState().profilePic;
+  if (!fileToUpload) throw new Error("No file selected");
 
-    if (!profilePic) return alert("Please select an image first!");
+  try {
+    set({ loading: true, error: null });
 
-    try {
-      set({ loading: true, error: null });
+    const res = await uploadProfileImageApi(fileToUpload);
 
-      const res = await uploadProfileImageApi(profilePic);
+    console.log("uploadProfileImageApi response:", res); // debug
 
-      set({
-        loading: false,
-        uploadedProfileUrl: res.data.url || null, 
-      });
+    // Correct access for fetch response
+    const uploadedUrl = res?.data || null; // 'data' contains the URL in your API response
 
-      alert("Image uploaded successfully!");
-    } catch (err) {
-      set({
-        loading: false,
-        error: err?.response?.data?.message || err.message || "Upload failed",
-      });
-
-      alert("Upload failed. Try again!");
-      throw err;
+    if (!uploadedUrl) {
+      throw new Error("Failed to get uploaded file URL from API");
     }
-  },
+
+    set({
+      loading: false,
+      uploadedProfileUrl: uploadedUrl,
+    });
+
+    return uploadedUrl;
+  } catch (err) {
+    set({ loading: false, error: err?.message || "Upload failed" });
+    throw err;
+  }
+},
+
+
+
+
 
   registerReferral: async (payload) => {
     try {
@@ -57,7 +64,8 @@ export const useAuthStore = create((set) => ({
     } catch (err) {
       set({
         loading: false,
-        error: err?.response?.data?.message || "Registration failed",
+        error:
+          err?.message || err?.response?.data?.message || "Registration failed",
       });
       throw err;
     }
