@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaChevronLeft } from "react-icons/fa6";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
@@ -82,7 +82,7 @@ const ConfirmPassword = () => {
           </div>
 
           <div className="login-headline flexGiven">
-            <Link to="/Verify-Code">
+            <Link to="/verify-code">
               <FaChevronLeft className="letIcon color-black" />
             </Link>
 
@@ -95,7 +95,7 @@ const ConfirmPassword = () => {
 
           <form onSubmit={handleResetPassword}>
             <div className="form-group">
-              <label className="label">New Password</label>
+              <label className="label">New Password <sup style={{color:"#fc3636"}}>*</sup></label>
               <div className="password-wrapper">
                 <input
                   type={showPass ? "text" : "password"}
@@ -111,7 +111,7 @@ const ConfirmPassword = () => {
             </div>
 
             <div className="form-group">
-              <label className="label">Confirm Password</label>
+              <label className="label">Confirm Password <sup style={{color:"#fc3636"}}>*</sup></label>
               <div className="password-wrapper">
                 <input
                   type={showConfirmPass ? "text" : "password"}

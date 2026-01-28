@@ -6,6 +6,7 @@ import { useAuthStore } from "../store/auth.store";
 import DpUpload from "../../../assets/images/DpUpload.png";
 import Logo from "../../../assets/images/Logo.svg";
 import "react-phone-input-2/lib/style.css";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ const CreateAccount = () => {
     countryCode: "+91",
     agree: false,
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // const [profilePic, setProfilePic] = useState(null);
 
@@ -87,12 +90,11 @@ const CreateAccount = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log("nfrnf", uploadedProfileUrl);
 
-    if (!uploadedProfileUrl) {
-      toast.error("Please upload profile picture");
-      return;
-    }
+    // if (!uploadedProfileUrl) {
+    //   toast.error("Please upload profile picture");
+    //   return;
+    // }
 
     const payload = {
       fullName: form.fullName,
@@ -139,8 +141,9 @@ const CreateAccount = () => {
                 className="profile-pic"
                 alt="Profile Upload"
               />
-              <label htmlFor="profileUpload" className="edit-icon">
-                ✎
+              <label htmlFor="profileUpload" className="plus-btn">
+                {/* ✎ */}
+                +
                 <input
                   id="profileUpload"
                   type="file"
@@ -164,13 +167,13 @@ const CreateAccount = () => {
               </label>
             </figure>
 
-            <button
+            {/* <button
               className="upload-btn"
               onClick={uploadProfilePic}
               disabled={loading}
             >
               {loading ? "Uploading..." : "Upload"}
-            </button>
+            </button> */}
           </div>
 
           <div className="login-headline">
@@ -182,7 +185,9 @@ const CreateAccount = () => {
             <div className="row">
               <div className="col-sm-6">
                 <div className="form-group">
-                  <label className="label">Full Name</label>
+                  <label className="label">
+                    Full Name <sup style={{ color: "#fc3636" }}>*</sup>
+                  </label>
                   <input
                     name="fullName"
                     className="form-control"
@@ -195,7 +200,9 @@ const CreateAccount = () => {
 
               <div className="col-sm-6">
                 <div className="form-group">
-                  <label className="label">Phone Number</label>
+                  <label className="label">
+                    Phone Number <sup style={{ color: "#fc3636" }}>*</sup>
+                  </label>
 
                   <PhoneInput
                     country="in"
@@ -216,48 +223,74 @@ const CreateAccount = () => {
                     inputClass="form-control phone-input"
                     containerClass="phone-container"
                     buttonClass="phone-flag-btn"
+                    countryCodeEditable={false}
                   />
                 </div>
               </div>
 
               <div className="col-sm-12">
                 <div className="form-group">
-                  <label className="label">Email</label>
+                  <label className="label">
+                    Email <sup style={{ color: "#fc3636" }}>*</sup>
+                  </label>
                   <input
                     name="email"
                     className="form-control"
                     placeholder="Enter your email id"
                     value={form.email}
                     onChange={handleChange}
+                    autoComplete="email"
                   />
                 </div>
               </div>
 
               <div className="col-sm-6">
                 <div className="form-group">
-                  <label className="label">Password</label>
+                  <label className="label">
+                    Password <sup style={{ color: "#fc3636" }}>*</sup>
+                  </label>
                   <input
                     name="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     className="form-control"
                     placeholder="Enter password"
                     value={form.password}
                     onChange={handleChange}
+                    autoComplete="new-password"
                   />
+                  <span
+                    className="eye-icons"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                  </span>
                 </div>
               </div>
 
               <div className="col-sm-6">
                 <div className="form-group">
-                  <label className="label">Confirm Password</label>
+                  <label className="label">
+                    Confirm Password <sup style={{ color: "#fc3636" }}>*</sup>
+                  </label>
                   <input
                     name="confirmPassword"
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     className="form-control"
                     placeholder="Confirm your password"
                     value={form.confirmPassword}
                     onChange={handleChange}
+                    autoComplete="new-password"
                   />
+                  <span
+                    className="eye-icons"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? (
+                      <IoEyeOffOutline />
+                    ) : (
+                      <IoEyeOutline />
+                    )}
+                  </span>
                 </div>
               </div>
 

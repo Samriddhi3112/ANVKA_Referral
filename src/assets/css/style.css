@@ -13,14 +13,49 @@ body {
 .avatar-box {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   gap: 12px;
 }
 
+.edit-profile-phone .phone-container {
+  width: 100%;
+}
+
+.edit-profile-phone .react-tel-input {
+  width: 100%;
+}
+
+.edit-profile-phone .phone-input {
+  width: 100% !important;
+  height: 46px;
+  padding-left: 60px !important;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.edit-profile-phone .phone-button {
+  border: 1px solid #ced4da;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  background: #fff;
+}
+
+.edit-profile-phone .flag-dropdown.open {
+  border-radius: 6px 0 0 0;
+}
+
+.edit-profile-phone .country-list {
+  width: 260px;
+  max-height: 220px;
+  z-index: 9999;
+}
+
+
 .avatar-figure {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   margin: 0;
 }
 
@@ -29,7 +64,7 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid #f68e34; 
+  /* border: 2px solid #f68e34;  */
   transition: transform 0.2s;
 }
 
@@ -41,8 +76,8 @@ body {
   position: absolute;
   bottom: 0;
   right: 0;
-  background-color: #f68e34;
-  color: #fff;
+  background-color: #fff;
+  color: black;
   border-radius: 50%;
   padding: 6px;
   cursor: pointer;
@@ -55,6 +90,42 @@ body {
 
 .edit-icon:hover {
   background-color: #f68e34; 
+}
+.profile-upload-wrapper {
+  cursor: pointer;
+}
+
+.profile-figure {
+  position: relative;
+  width: 90px;   /* same as your avatar */
+  height: 90px;
+  border-radius: 50%;
+}
+
+.profile-pic-icon {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Upload icon overlay */
+.upload-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-icon img {
+  width: 14px;
+  height: 14px;
 }
 
 .upload-btn {
@@ -84,20 +155,19 @@ body {
 
 .phone-container .form-control {
   width: 100%;
-  height: 48px;
+  height: 41px;
   padding-left: 60px !important; 
   font-size: 14px;
 }
 
-.phone-flag-btn {
+/* .phone-flag-btn {
   border: none !important;
-}
+} */
 
 .react-tel-input .flag-dropdown {
-  background: transparent;
-  border: none;
+  background: #e5e7eb99 !important ;
+  /* border: none; */
 }
-
 
 * {
     margin: 0px;
@@ -217,6 +287,55 @@ select{cursor: pointer;outline: 0;}
   height: auto !important;
   padding: 80px;
 } */
+.phone-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* LEFT SMALL BOX */
+.country-box {
+  width: 64px;
+}
+
+.country-box .form-control {
+  display: none; /* hide input, only flag */
+}
+
+.country-flag {
+  width: 64px !important;
+  height: 44px !important;
+  border: 1px solid #dcdcdc !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+}
+
+/* RIGHT BIG INPUT */
+.phone-box {
+  flex: 1;
+  height: 44px;
+  border-radius: 6px;
+}
+
+.phone-wrapper {
+  width: 460px;
+}
+
+.phone-container {
+  width: 100% !important;
+}
+
+.country-btn {
+  width: 90px !important;
+  border-right: 1px solid #ced4da;
+}
+
+.phone-input {
+  width: 100% !important;
+  padding-left: 100px !important; /* space for country code */
+  height: 40px;
+  font-size: 14px;
+}
 
 .login::before {
   content: "";
@@ -300,7 +419,7 @@ select{cursor: pointer;outline: 0;}
   margin-bottom: 10px;
 }
 .login .login-box .form-group .form-control {
-  border: 1.2px solid rgba(229, 231, 235, 1);
+  /* border: 1.2px solid rgba(229, 231, 235, 1); */
   appearance: auto !important;
   color: rgba(31, 41, 55, 1);
   font-size: 13px;
@@ -309,7 +428,7 @@ select{cursor: pointer;outline: 0;}
   padding: 10px;
 }
 .form-group .form-control {
-  border: 1.2px solid rgba(229, 231, 235, 1);
+  /* border: 1.2px solid rgba(229, 231, 235, 1); */
   appearance: auto !important;
   color: rgba(31, 41, 55, 1);
   font-size: 13px;
@@ -1105,7 +1224,8 @@ header {display: flex;justify-content: space-between;align-items: center;padding
 header .logo {width: 250px;text-align: left;padding-left: 15px;}
 header .logo img {width: 118px;}
 header .right .dropdown .dropdown-toggle {background-color: transparent;border: transparent; padding: 0;font-size: 14px;color: rgba(17, 24, 39, 1);}
-header .right .dropdown .dropdown-toggle span {border: 5px solid rgba(255, 255, 255, 0.07);width: 49px;height: 49px;display: inline-block;border-radius: 50%;}
+/* header .right .dropdown .dropdown-toggle span {border: 5px solid rgba(255, 255, 255, 0.07);width: 49px;height: 49px;display: inline-block;border-radius: 50%;} */
+header .right .dropdown .dropdown-toggle span {border: 5px solid rgba(255, 255, 255, 0.07);display: inline-block;border-radius: 50%;}
 header .right .dropdown .dropdown-toggle:focus {box-shadow: none;}
 header .right .dropdown .dropdown-toggle::after {display: none!important;}
 header .right .dropdown .dropdown-toggle svg {margin: 0 0 0 10px;font-size: 20px;}
@@ -1116,9 +1236,10 @@ header .right .searchBar svg {position: absolute;top: 50%;transform: translateY(
 header .right .searchBar input {border: none;outline: none;height: 100%;padding-left: 35px;background-color: transparent;font-size: 13px;color: rgba(152, 152, 152, 1);}
 header .right .bellIcon {color: rgba(107, 114, 128, 1);font-size: 20px;position: relative;margin: 0 15px;}
 header .right .bellIcon span {position: absolute; top: -5px; right: -5px;color: var(--white);background-color: var(--brandColor);font-size: 12px;border-radius: 50%;padding: 0px 5px;}
-
-header .right .dropdown-menu {padding:10px 10px 10px;background-color: #fff;border-radius: 8px;min-width: 175px;}
-header .right .dropdown-menu a {text-align: center;color: #1A1C1E;font-weight: 600;margin: 0 0 15px 0;background-color: transparent;display: inline-block;width: 100%;font-size: 14px;}
+header .right .dropdown-menu {background-color: #fff;border-radius: 8px;}
+/* header .right .dropdown-menu {padding:10px 10px 10px;background-color: #fff;border-radius: 8px;min-width: 175px;} */
+/* header .right .dropdown-menu a {text-align: center;color: #1A1C1E;font-weight: 600;margin: 0 0 15px 0;background-color: transparent;display: inline-block;width: 100%;font-size: 14px;} */
+header .right .dropdown-menu a {text-align: center;color: #1A1C1E;font-weight: 600;background-color: transparent;display: inline-block;width: 100%;font-size: 14px;}
 header .right .dropdown-menu a:hover {color: var(--brandColor);background-color: transparent;}
 
 .notificationBody .notificationBox.showNotification {right: 0;}
@@ -1280,7 +1401,7 @@ border-radius: 6px;font-size: 13px;margin: 0 0 30px auto;
 .commonForm .form-group h6 {font-weight: 500;font-size: 13px;color: #030712;margin: 0 0 10px 0;}
 .commonForm .form-group .form-control {border: 1px solid #E5E7EB; color: #374151; resize: none; font-size: 13px;padding: 10px 15px;height: auto;border-radius: 5px;background-color: transparent;appearance: auto;}
 .commonForm .form-group .form-control:focus {box-shadow: none;}
-.commonForm .form-group ul {display: flex;}
+/* .commonForm .form-group ul {display: flex;} */
 .commonForm .form-group ul li {margin: 0 15px 0 0;}
 /* .commonForm .form-group ul li  */
 
@@ -1441,11 +1562,11 @@ border-radius: 6px;font-size: 13px;margin: 0 0 30px auto;
 
 .plus-btn {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
+  bottom: 5px;
+  right: 0px;
   width: 30px;
   height: 30px;
-  background: white;
+  /* background: white; */
   border-radius: 50%;
   /* border: 2px solid #ddd; */
   display: flex;
@@ -1454,7 +1575,7 @@ border-radius: 6px;font-size: 13px;margin: 0 0 30px auto;
   font-size: 20px;
   font-weight: bold;
   color: purple;
-  pointer-events: none; /* allow click to pass through */
+  pointer-events: none; 
 }
 
 .upload-input {

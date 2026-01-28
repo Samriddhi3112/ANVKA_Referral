@@ -11,7 +11,7 @@ import CircularProgress from "../../../shared/components/CircularProgress";
 const VerifyCode = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { phoneOrEmail } = location.state || {};
+  const { phoneOrEmail, devOtp } = location.state || {};
   const [timer, setTimer] = useState(60);
 
   const { verifyForgotPasswordOtp, resendPasswordOtp, loading } =
@@ -46,14 +46,14 @@ const VerifyCode = () => {
       });
 
       toast.success("OTP verified successfully", {
-        duration: 2000, // 👈 toast will stay for 2 sec
+        duration: 1000,
       });
 
       setTimeout(() => {
-        navigate("/Confirm-Password", {
+        navigate("/confirm-password", {
           state: { phoneOrEmail, otpCode: otp },
         });
-      }, 1800); // 👈 navigate slightly before toast ends
+      }, 1800);
     } catch (err) {
       toast.error(err.message);
     }
@@ -82,27 +82,22 @@ const VerifyCode = () => {
           </figure>
         </div>
 
-        {/* HEADER */}
         <div className="login-headline flexGiven">
-          <Link to="/Forget-Password">
+          <Link to="/forgot-password">
             <FaChevronLeft className="letIcon color-black" />
           </Link>
 
           <div>
             <h5>Verify Code</h5>
-            <p>
-              We have sent a verification code to your registered email /
-              mobile.
-            </p>
+            <p>We have sent a verification code to your registered email</p>
           </div>
         </div>
 
-        {/* FORM */}
         <form onSubmit={handleVerifyOtp}>
           <div className="form-group">
             <div className="otp-label">
               <label className="label">
-                OTP <sup>*</sup>
+                OTP <sup style={{ color: "#fc3636" }}>*</sup>
               </label>
               <span className="otp-timer">
                 {timer > 0 && (
@@ -172,10 +167,14 @@ const VerifyCode = () => {
               Resend OTP
             </span>
           </p>
+          {devOtp && (
+            <p style={{ marginTop: "10px", color: "#16a34a", fontWeight: 500 }}>
+              OTP is: {devOtp}
+            </p>
+          )}
 
-          {/* ACTION BUTTONS */}
           <div className="call-options footer-btns">
-            <Link to="/Forget-Password" className="btn-transparent">
+            <Link to="/forgot-password" className="btn-transparent">
               Back
             </Link>
             <button type="submit" className="btn-colored" disabled={loading}>

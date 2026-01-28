@@ -10,11 +10,10 @@ import { useLocation } from "react-router-dom";
 
 const Sidenav = () => {
   const location = useLocation();
+  const isExactActive = (path) => location.pathname === path;
 
   const isActive = (paths) => {
-    return paths.some((path) =>
-      location.pathname.startsWith(path)
-    );
+    return paths.some((path) => location.pathname.startsWith(path));
   };
 
   return (
@@ -29,8 +28,8 @@ const Sidenav = () => {
           </NavLink>
         </li>
 
-        <li className={isActive(["/recent-registration"]) ? "active" : ""}>
-          <NavLink to="/recent-registration">
+        <li className={isActive(["/registered-patients"]) ? "active" : ""}>
+          <NavLink to="/registered-patients">
             <span>
               <img src={patients} alt="Patients" />
             </span>
@@ -38,37 +37,39 @@ const Sidenav = () => {
           </NavLink>
         </li>
 
-        <li className={isActive(["/latest-referral"]) ? "active" : ""}>
-          <NavLink to="/latest-referral">
+        <li
+          className={isExactActive("/referrals/consultation") ? "active" : ""}
+        >
+          <NavLink to="/referrals/consultation">
             <span>
-              <img src={referredIcon} alt="Referred Consultation" />
+              <img src={referredIcon} alt="" />
             </span>
             Referred Consultation
           </NavLink>
         </li>
 
-        <li className={isActive(["/latest-post-arrival"]) ? "active" : ""}>
-          <NavLink to="/latest-post-arrival">
+        <li className={isExactActive("/referrals/care") ? "active" : ""}>
+          <NavLink to="/referrals/care">
             <span>
-              <img src={postarrivalIcon} alt="Post Arrival Care" />
+              <img src={postarrivalIcon} alt="" />
             </span>
             Post Arrival Care
           </NavLink>
         </li>
 
-        <li className={isActive(["/latest-profile"]) ? "active" : ""}>
-          <NavLink to="/latest-profile">
+        <li className={isExactActive("/referrals/profile") ? "active" : ""}>
+          <NavLink to="/referrals/profile">
             <span>
-              <img src={completionIcon} alt="Profile Completion" />
+              <img src={completionIcon} alt="" />
             </span>
             Profile Completion
           </NavLink>
         </li>
 
-        <li className={isActive(["/referred-treatment"]) ? "active" : ""}>
-          <NavLink to="/referred-treatment">
+        <li className={isExactActive("/referrals/treatment") ? "active" : ""}>
+          <NavLink to="/referrals/treatment">
             <span>
-              <img src={referredTreatIcon} alt="Referred Treatment" />
+              <img src={referredTreatIcon} alt="" />
             </span>
             Referred Treatment
           </NavLink>
@@ -76,9 +77,7 @@ const Sidenav = () => {
 
         <li
           className={
-            isActive(["/referral-earnings", "/withdraw-money"])
-              ? "active"
-              : ""
+            isActive(["/referral-earnings", "/withdraw-money"]) ? "active" : ""
           }
         >
           <NavLink to="/referral-earnings">
@@ -91,12 +90,10 @@ const Sidenav = () => {
 
         <li
           className={
-            isActive(["/user-profile", "/change-password"])
-              ? "active"
-              : ""
+            isActive(["/profile", "/change-password"]) ? "active" : ""
           }
         >
-          <NavLink to="/user-profile">
+          <NavLink to="/profile">
             <span>
               <img src={patients} alt="Profile" />
             </span>

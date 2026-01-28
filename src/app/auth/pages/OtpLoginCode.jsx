@@ -15,11 +15,17 @@ const OtpLoginCode = () => {
 
   const { verifyLoginOtp, requestLoginOtp, loading } = useAuthStore();
 
-  const { phoneOrEmail, countryCode } = location.state || {};
+  const { phoneOrEmail, countryCode, devOtp } = location.state || {};
   const phone = phoneOrEmail;
 
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(60);
+
+  // useEffect(() => {
+  //   if (devOtp) {
+  //     setOtp(devOtp);
+  //   }
+  // }, [devOtp]);
 
   useEffect(() => {
     if (!phone || !countryCode) {
@@ -174,6 +180,11 @@ const OtpLoginCode = () => {
               Resend OTP
             </span>
           </p>
+          {devOtp && (
+            <p style={{ marginTop: "10px", color: "#16a34a", fontWeight: 500 }}>
+              OTP is: {devOtp}
+            </p>
+          )}
 
           <div className="call-options footer-btns">
             <Link to="/" className="btn-transparent">

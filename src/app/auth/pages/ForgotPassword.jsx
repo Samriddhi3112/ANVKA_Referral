@@ -24,7 +24,7 @@ const ForgotPassword = () => {
     const phoneRegex = /^[6-9]\d{9}$/;
 
     if (!emailRegex.test(phoneOrEmail) && !phoneRegex.test(phoneOrEmail)) {
-      setError("Enter a valid email or mobile number");
+      setError("Enter a valid email ");
       return false;
     }
 
@@ -40,7 +40,7 @@ const ForgotPassword = () => {
       const res = await forgotPasswordOtp({ phoneOrEmail });
 
       toast.success("OTP sent successfully" || res.message);
-      navigate("/Verify-Code", { state: { phoneOrEmail } });
+      navigate("/verify-code", { state: { phoneOrEmail, devOtp: res?.data?.otpCode } });
     } catch (err) {
       toast.error(
         "This email is not registered. Please create an account first." ||
@@ -74,7 +74,7 @@ const ForgotPassword = () => {
 
         <form onSubmit={handleSendOtp}>
           <div className="form-group">
-            <label className="label">Email Id</label>
+            <label className="label">Email Id <sup style={{color:"#fc3636"}}>*</sup></label>
             <input
               type="text"
               className="form-control"

@@ -2,20 +2,18 @@ const CircularProgress = ({
   size = 40,
   radius = 10,
   strokeWidth = 3,
-  percent = 100, // 👈 0–100
+  percent = 100, 
   bgColor = "#eee",
   progressColor = "#ff7a00",
 }) => {
   const center = size / 2;
   const circumference = 2 * Math.PI * radius;
  
-  // ✅ MAIN FIX
   const strokeDashoffset =
     circumference - (percent / 100) * circumference;
  
   return (
     <svg width={size} height={size}>
-      {/* Background circle */}
       <circle
         cx={center}
         cy={center}
@@ -25,7 +23,6 @@ const CircularProgress = ({
         fill="none"
       />
  
-      {/* Progress circle */}
       <circle
         cx={center}
         cy={center}

@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 import Sidenav from "./SideNav";
 import Header from "./Header";
 
-
 const AppLayout = () => {
   return (
     <div className="AppLayout">

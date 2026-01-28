@@ -32,6 +32,11 @@ export const resetPasswordApi = (data) => {
   return axiosInstance.post("/auth/referral/reset-password", data);
 };
 
+export const requestLogoutApi = () => {
+  return axiosInstance.post("/auth/referral/logout");
+};
+
+
 export const uploadProfileImageApi = async (file) => {
   const formData = new FormData();
   formData.append("file", file);

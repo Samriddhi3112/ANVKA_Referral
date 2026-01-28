@@ -9,6 +9,7 @@ import {
   verifyForgotPasswordOtpApi,
   resetPasswordApi,
   uploadProfileImageApi,
+  requestLogoutApi
 } from "../services/auth.api";
 
 export const useAuthStore = create((set) => ({
@@ -30,10 +31,7 @@ export const useAuthStore = create((set) => ({
 
     const res = await uploadProfileImageApi(fileToUpload);
 
-    console.log("uploadProfileImageApi response:", res); // debug
-
-    // Correct access for fetch response
-    const uploadedUrl = res?.data || null; // 'data' contains the URL in your API response
+    const uploadedUrl = res?.data || null; 
 
     if (!uploadedUrl) {
       throw new Error("Failed to get uploaded file URL from API");
@@ -50,10 +48,6 @@ export const useAuthStore = create((set) => ({
     throw err;
   }
 },
-
-
-
-
 
   registerReferral: async (payload) => {
     try {
@@ -72,37 +66,39 @@ export const useAuthStore = create((set) => ({
   },
 
   loginWithPassword: async (data) => {
-    try {
-      set({ loading: true, error: null });
+  try {
+    set({ loading: true, error: null });
 
-      const res = await loginWithPasswordApi(data);
+    const res = await loginWithPasswordApi(data);
 
-      localStorage.setItem("token", res.data.token);
+    localStorage.setItem("token", res.data.data.token);
 
-      set({
-        token: res.data.token,
-        isAuthenticated: true,
-        loading: false,
-      });
+    set({
+      token: res.data.data.token,
+      isAuthenticated: true,
+      loading: false,
+    });
 
-      return res.data;
-    } catch (err) {
-      set({
-        loading: false,
-        error: err?.response?.data?.message || "Login failed",
-      });
+    return res.data;
+  } catch (err) {
+    set({
+      loading: false,
+      error: err?.response?.data?.message || "Login failed",
+    });
 
-      throw err;
-    }
-  },
+    throw err;
+  }
+},
+
 
   requestLoginOtp: async (payload) => {
     try {
       set({ loading: true, error: null });
 
-      await requestLoginOtpApi(payload);
+      const res =await requestLoginOtpApi(payload);
 
       set({ loading: false, otpSent: true });
+      return res?.data || res;
     } catch (err) {
       const message =
         err?.response?.data?.message || err.message || "OTP send failed";
@@ -228,11 +224,25 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  logout: () => {
+
+logout: async () => {
+  try {
+    await requestLogoutApi(); 
+
     localStorage.removeItem("token");
     set({
       token: null,
       isAuthenticated: false,
     });
-  },
+  } catch (error) {
+    console.error("Logout failed", error);
+    
+    localStorage.removeItem("token");
+    set({
+      token: null,
+      isAuthenticated: false,
+    });
+  }
+},
+
 }));

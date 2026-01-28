@@ -16,7 +16,7 @@ import "react-phone-input-2/lib/style.css";
 const LoginPage = () => {
   const navigate = useNavigate();
   const { loginWithPassword, requestLoginOtp, loading } = useAuthStore();
-
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -79,17 +79,18 @@ const LoginPage = () => {
     }
 
     try {
-      await requestLoginOtp({
+      const res = await requestLoginOtp({
         phoneOrEmail: phoneNumberOnly,
         countryCode,
       });
 
       toast.success("OTP sent successfully");
 
-      navigate("/Otp-Login-Code", {
+      navigate("/otp-login", {
         state: {
           phoneOrEmail: phoneNumberOnly,
           countryCode,
+          devOtp: res?.data?.otpCode,
         },
       });
     } catch (err) {
@@ -99,6 +100,40 @@ const LoginPage = () => {
       );
     }
   };
+
+  // const handleOtpLogin = async (e) => {
+  //   e.preventDefault();
+  //   if (!validatePhone()) return;
+
+  //   const phoneNumberOnly = getPurePhoneNumber();
+
+  //   if (!phoneNumberOnly || phoneNumberOnly.length < 10) {
+  //     toast.error("Enter a valid phone number");
+  //     return;
+  //   }
+
+  //   try {
+  //     await requestLoginOtp({
+  //       phoneOrEmail: phoneNumberOnly,
+  //       countryCode,
+  //     });
+
+  //     toast.success("OTP sent successfully");
+
+  //     navigate("/otp-login", {
+  //       state: {
+  //         phoneOrEmail: phoneNumberOnly,
+  //         countryCode,
+  //         devOtp: res?.data?.otpCode,
+  //       },
+  //     });
+  //   } catch (err) {
+  //     toast.error(
+  //       err?.response?.data?.message ||
+  //         "Number not registered. Please sign up first."
+  //     );
+  //   }
+  // };
 
   const handlePasswordLogin = async (e) => {
     e.preventDefault();
@@ -145,9 +180,15 @@ const LoginPage = () => {
           <Tab.Content className="mt-4">
             <Tab.Pane eventKey="otp">
               <form onSubmit={handleOtpLogin}>
-                <label className="label">Phone Number</label>
+                <label
+                  className="label"
+                  style={{ fontSize: "12px", fontWeight: "500" }}
+                >
+                  Phone Number <sup style={{ color: "#fc3636" }}>*</sup>
+                </label>
 
                 <PhoneInput
+                  className="border"
                   country="in"
                   value={phone}
                   onChange={(value, data) => {
@@ -159,7 +200,7 @@ const LoginPage = () => {
                   inputClass="form-control"
                   containerClass="phone-input-container"
                   // style={{ width: "460px" }}
-                   inputStyle={{ width: "460px" }}
+                  inputStyle={{ width: "460px" }}
                 />
 
                 <div className="footer-login-pad">
@@ -173,34 +214,40 @@ const LoginPage = () => {
             <Tab.Pane eventKey="password">
               <form onSubmit={handlePasswordLogin}>
                 <div className="form-group">
-                  <label>Email</label>
+                  <label style={{ fontSize: "12px", fontWeight: "500" }}>
+                    Email <sup style={{ color: "#fc3636" }}>*</sup>
+                  </label>
                   <input
                     type="email"
                     className="form-control"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter email"
+                    placeholder="Enter your email"
+                    autoComplete="email"
                   />
                 </div>
 
                 <div className="form-group">
-                  <label>Password</label>
+                  <label style={{ fontSize: "12px", fontWeight: "500" }}>
+                    Password <sup style={{ color: "#fc3636" }}>*</sup>
+                  </label>
                   <input
                     type={showPassword ? "text" : "password"}
                     className="form-control"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter password"
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
                   />
                   <span
                     className="eye-icon"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                    {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
                   </span>
 
                   <div className="forgot">
-                    <Link to="/Forget-Password">Forgot Password?</Link>
+                    <Link to="/forgot-password">Forgot Password?</Link>
                   </div>
                 </div>
 
@@ -217,7 +264,7 @@ const LoginPage = () => {
         <div className="footer-login mt-0">
           <h6>
             New User?
-            <Link to="/Create-Account">
+            <Link to="/create-account">
               <span> Create Account</span>
             </Link>
           </h6>
