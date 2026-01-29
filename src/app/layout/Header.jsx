@@ -48,7 +48,7 @@ const Header = () => {
     try {
       await logout();
       setShowModal(false);
-      navigate("/");
+      navigate("/",{ replace: true });
     } catch (err) {
       console.error("Logout failed:", err);
     }

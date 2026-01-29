@@ -3,14 +3,17 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useProfileStore } from "../store/profile.store";
 import Modal from "react-bootstrap/Modal";
-import OtpAnimation from "../../../assets/images/otpanimation.svg";
 import OtpConf from "../../../assets/images/OtpConf.svg";
 import toast from "react-hot-toast";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const ChangePassword = () => {
   const [show, setShow] = useState(false);
   const { changePassword, loading } = useProfileStore();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     currentPassword: "",
@@ -27,53 +30,53 @@ const ChangePassword = () => {
   };
 
   const handleSavePassword = async () => {
-  const { currentPassword, newPassword, confirmPassword } = formData;
+    const { currentPassword, newPassword, confirmPassword } = formData;
 
-  if (!currentPassword || !newPassword || !confirmPassword) {
-    toast.error("Current password, new password, and confirm password are required.");
-    return;
-  }
-
-  if (currentPassword === newPassword) {
-    toast.error("New password must be different from current password.");
-    return;
-  }
-
-  if (newPassword !== confirmPassword) {
-    toast.error("New password and confirm password do not match.");
-    return;
-  }
-
-  if (newPassword.length < 6) {
-    toast.error("New password must be at least 6 characters long.");
-    return;
-  }
-
-  try {
-    const res = await changePassword({
-      currentPassword,
-      newPassword,
-    });
-
-    if (res.success === false) {
-      toast.error(res.message || "Failed to change password.");
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error(
+        "Current password, new password, and confirm password are required."
+      );
       return;
     }
 
-    toast.success(res.message || "Password changed successfully!");
-    setShow(false);
-    setShowSuccess(true);
+    if (currentPassword === newPassword) {
+      toast.error("New password must be different from current password.");
+      return;
+    }
 
-  } catch (err) {
-    const backendMessage =
-      err?.response?.data?.message ||
-      err?.message ||
-      "Failed to change password.";
-    toast.error(backendMessage);
-    console.error("Change password error:", err);
-  }
-};
+    if (newPassword !== confirmPassword) {
+      toast.error("New password and confirm password do not match.");
+      return;
+    }
 
+    if (newPassword.length < 6) {
+      toast.error("New password must be at least 6 characters long.");
+      return;
+    }
+
+    try {
+      const res = await changePassword({
+        currentPassword,
+        newPassword,
+      });
+
+      if (res.success === false) {
+        toast.error(res.message || "Failed to change password.");
+        return;
+      }
+
+      toast.success(res.message || "Password changed successfully!");
+      setShow(false);
+      setShowSuccess(true);
+    } catch (err) {
+      const backendMessage =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to change password.";
+      toast.error(backendMessage);
+      console.error("Change password error:", err);
+    }
+  };
 
   // const handleSavePassword = async () => {
   //   const { currentPassword, newPassword, confirmPassword } = formData;
@@ -141,9 +144,12 @@ const ChangePassword = () => {
               <div className="row">
                 <div className="col-lg-4">
                   <div className="form-group">
-                    <h6>Current Password<sup style={{ color: "#fc3636" }}>*</sup></h6>
+                    <h6>
+                      Current Password<sup style={{ color: "#fc3636" }}>*</sup>
+                    </h6>
                     <input
-                      type="password"
+                      style={{ backgroundColor: "white" }}
+                        type={showPassword ? "text" : "password"}
                       className="form-control"
                       placeholder="Enter current password"
                       value={formData.currentPassword}
@@ -154,13 +160,22 @@ const ChangePassword = () => {
                         })
                       }
                     />
+                    <span
+                      className="eye-iconz"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                    </span>
                   </div>
                 </div>
                 <div className="col-lg-4">
                   <div className="form-group">
-                    <h6>New Password<sup style={{ color: "#fc3636" }}>*</sup></h6>
+                    <h6>
+                      New Password<sup style={{ color: "#fc3636" }}>*</sup>
+                    </h6>
                     <input
-                      type="password"
+                      style={{ backgroundColor: "white" }}
+                        type={showNewPassword ? "text" : "password"}
                       className="form-control"
                       placeholder="Enter new password"
                       value={formData.newPassword}
@@ -171,13 +186,23 @@ const ChangePassword = () => {
                         })
                       }
                     />
+                    <span
+                      className="eye-iconz"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                    >
+                      {showNewPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                    </span>
                   </div>
                 </div>
                 <div className="col-lg-4">
                   <div className="form-group">
-                    <h6>Confirm New Password<sup style={{ color: "#fc3636" }}>*</sup></h6>
+                    <h6>
+                      Confirm New Password
+                      <sup style={{ color: "#fc3636" }}>*</sup>
+                    </h6>
                     <input
-                      type="password"
+                      style={{ backgroundColor: "white" }}
+                        type={showConfirmPassword ? "text" : "password"}
                       className="form-control"
                       placeholder="Confirm new password"
                       value={formData.confirmPassword}
@@ -188,6 +213,18 @@ const ChangePassword = () => {
                         })
                       }
                     />
+                    <span
+                      className="eye-iconz"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    >
+                      {showConfirmPassword ? (
+                        <IoEyeOffOutline />
+                      ) : (
+                        <IoEyeOutline />
+                      )}
+                    </span>
                   </div>
                 </div>
               </div>

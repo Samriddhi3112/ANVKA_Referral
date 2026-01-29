@@ -49,22 +49,31 @@ const EditFacilitatorInformation = () => {
   };
 
   const handleSave = async () => {
-  try {
-    const res = await updateProfile(formData);
+    try {
+      const emptyFields = Object.entries(formData)
+        .filter(
+          ([key, value]) =>
+            value === "" || value === null || value === undefined
+        )
+        .map(([key]) => key);
 
-    if (res?.success) {
-      toast.success(res.message || "Profile updated successfully");
-      navigate("/profile");
+      if (emptyFields.length > 0) {
+        toast.error(`Please fill all fields`);
+        return; 
+      }
+      const res = await updateProfile(formData);
+
+      if (res?.success) {
+        toast.success(res.message || "Profile updated successfully");
+        navigate("/profile");
+      }
+    } catch (err) {
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "Something went wrong";
+
+      toast.error(errorMessage);
     }
-  } catch (err) {
-    const errorMessage =
-      err?.response?.data?.message ||
-      err?.message ||
-      "Something went wrong";
-
-    toast.error(errorMessage);
-  }
-};
+  };
 
   return (
     <div className="WrapperArea">
@@ -79,6 +88,7 @@ const EditFacilitatorInformation = () => {
               <div className="form-group">
                 <h6>Name</h6>
                 <input
+                  style={{ backgroundColor: "white" }}
                   type="text"
                   className="form-control"
                   name="fullName"
@@ -93,8 +103,9 @@ const EditFacilitatorInformation = () => {
                 <h6>Contact Number</h6>
 
                 <div className="d-flex gap-2">
-                  <div className="edit-profile-phone" style={{width:"100%"}}>
+                  <div className="edit-profile-phone" style={{ width: "100%" }}>
                     <PhoneInput
+                      style={{ backgroundColor: "white" }}
                       country="in"
                       value={`${formData.countryCode}${formData.phone}`}
                       onChange={(value, data) => {
@@ -121,6 +132,7 @@ const EditFacilitatorInformation = () => {
               <div className="form-group">
                 <h6>Email</h6>
                 <input
+                  style={{ backgroundColor: "white" }}
                   type="text"
                   className="form-control"
                   name="email"

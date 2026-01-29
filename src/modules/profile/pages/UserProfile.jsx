@@ -64,7 +64,7 @@ const UserProfile = () => {
     try {
       await logout();
       setShow(false);
-      navigate("/");
+      navigate("/",{ replace: true });
     } catch (err) {
       console.error("Logout failed:", err);
       toast.error("Logout failed");
@@ -93,7 +93,7 @@ const UserProfile = () => {
                     <img src={UploadProfile} alt="Upload" />
                   </span> */}
                 </figure>
-                <div class="plus-btn">
+                <div className="plus-btn">
                   <span>
                     <img src={UploadProfile} alt="" />
                   </span>

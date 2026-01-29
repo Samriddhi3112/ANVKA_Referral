@@ -1,11 +1,21 @@
 import { create } from "zustand";
 import { axiosInstance } from "../../../app/auth/services/apiClient";
+import {
+  requestLogoutApi,
+} from "../../../app/auth/services/auth.api";
 
 export const useProfileStore = create((set) => ({
-  profile:null,
+  profile: null,
   user: null,
   loading: false,
   error: null,
+
+  clearProfile: () =>
+    set({
+      user: null,
+      loading: false,
+      error: null,
+    }),
 
   fetchProfile: async () => {
     set({ loading: true, error: null });
@@ -23,7 +33,7 @@ export const useProfileStore = create((set) => ({
     try {
       const response = await axiosInstance.put(
         "/auth/referral/update-profile",
-        payload 
+        payload
       );
 
       set({
@@ -34,9 +44,7 @@ export const useProfileStore = create((set) => ({
       return response.data;
     } catch (err) {
       set({
-        error:
-          err?.response?.data?.message ||
-          "Failed to update profile",
+        error: err?.response?.data?.message || "Failed to update profile",
         loading: false,
       });
       throw err;
@@ -56,9 +64,7 @@ export const useProfileStore = create((set) => ({
     } catch (err) {
       set({
         loading: false,
-        error:
-          err?.response?.data?.message ||
-          "Failed to change password",
+        error: err?.response?.data?.message || "Failed to change password",
       });
       throw err;
     }
@@ -66,13 +72,29 @@ export const useProfileStore = create((set) => ({
 
   logout: async () => {
   try {
-    await axiosInstance.post("/auth/referral/logout");
-    set({ user: null });
+    // 1️⃣ Backend logout (fail bhi ho to state clear honi chahiye)
+    await requestLogoutApi();
+  } catch (error) {
+    console.log("Logout API failed", error);
+  } finally {
+    // 2️⃣ Token clear
     localStorage.removeItem("token");
-  } catch (err) {
-    set({ error: err?.response?.data?.message || err.message });
+
+    // 3️⃣ Auth related sab kuch reset
+    set({
+      token: null,
+      isAuthenticated: false,
+      profilePic: null,          // 🔥 image file clear
+      uploadedProfileUrl: null,  // 🔥 uploaded image url clear
+      user: null,
+      error: null,
+      loading: false,
+    });
+
+    // 4️⃣ Profile store bhi clear (MOST IMPORTANT)
+    const { clearProfile } = useProfileStore.getState();
+    clearProfile();
   }
 },
-
 
 }));

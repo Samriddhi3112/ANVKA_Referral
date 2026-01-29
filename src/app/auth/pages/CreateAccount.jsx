@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import toast from "react-hot-toast";
@@ -18,6 +18,7 @@ const CreateAccount = () => {
     setProfilePic,
     profilePic: selectedProfilePic,
   } = useAuthStore();
+  const { resetProfileImage } = useAuthStore();
 
   const [form, setForm] = useState({
     fullName: "",
@@ -32,7 +33,9 @@ const CreateAccount = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // const [profilePic, setProfilePic] = useState(null);
-
+  useEffect(() => {
+    resetProfileImage();
+  }, [resetProfileImage]);
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
@@ -132,18 +135,19 @@ const CreateAccount = () => {
 
           <div className="avatar-box">
             <figure className="avatar-figure">
-              <img
-                src={
-                  selectedProfilePic
-                    ? URL.createObjectURL(selectedProfilePic)
-                    : uploadedProfileUrl || DpUpload
-                }
-                className="profile-pic"
-                alt="Profile Upload"
-              />
-              <label htmlFor="profileUpload" className="plus-btn">
+              <label htmlFor="profileUpload" className="avatar-label">
+                <img
+                  src={
+                    selectedProfilePic
+                      ? URL.createObjectURL(selectedProfilePic)
+                      : uploadedProfileUrl || DpUpload
+                  }
+                  key={selectedProfilePic || uploadedProfileUrl || "default"}
+                  className="profile-pic"
+                  alt="Profile Upload"
+                />
                 {/* ✎ */}
-                +
+                <span className="plus-icon">+</span>
                 <input
                   id="profileUpload"
                   type="file"

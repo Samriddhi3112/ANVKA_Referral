@@ -65,14 +65,10 @@ const OtpLoginCode = () => {
         otpCode: otp,
       });
 
-      if (res?.success || res?.data?.success) {
-        toast.success("Login successful");
-        navigate("/overview");
-      } else {
-        toast.error(res?.message || "Invalid OTP");
-      }
+      toast.success("Login successful");
+      navigate("/overview");
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Invalid or expired OTP");
+      toast.error(err?.message || "Invalid or expired OTP");
     }
   };
 

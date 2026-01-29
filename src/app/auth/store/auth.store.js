@@ -9,7 +9,7 @@ import {
   verifyForgotPasswordOtpApi,
   resetPasswordApi,
   uploadProfileImageApi,
-  requestLogoutApi
+  requestLogoutApi,
 } from "../services/auth.api";
 
 export const useAuthStore = create((set) => ({
@@ -20,34 +20,48 @@ export const useAuthStore = create((set) => ({
   profilePic: null,
   uploadedProfileUrl: null,
 
+  user: null,
+  clearProfile: () =>
+    set({
+      user: null,
+      loading: false,
+      error: null,
+    }),
+
+     resetProfileImage: () =>
+    set({
+      profilePic: null,
+      uploadedProfileUrl: null,
+    }),
+
   setProfilePic: (file) => set({ profilePic: file }),
 
   uploadProfilePic: async (file) => {
-  const fileToUpload = file || useAuthStore.getState().profilePic;
-  if (!fileToUpload) throw new Error("No file selected");
+    const fileToUpload = file || get().profilePic;
+    if (!fileToUpload) throw new Error("No file selected");
 
-  try {
-    set({ loading: true, error: null });
+    try {
+      set({ loading: true, error: null });
 
-    const res = await uploadProfileImageApi(fileToUpload);
+      const res = await uploadProfileImageApi(fileToUpload);
 
-    const uploadedUrl = res?.data || null; 
+      const uploadedUrl = res?.data || null;
 
-    if (!uploadedUrl) {
-      throw new Error("Failed to get uploaded file URL from API");
+      if (!uploadedUrl) {
+        throw new Error("Failed to get uploaded file URL from API");
+      }
+
+      set({
+        loading: false,
+        uploadedProfileUrl: uploadedUrl,
+      });
+
+      return uploadedUrl;
+    } catch (err) {
+      set({ loading: false, error: err?.message || "Upload failed" });
+      throw err;
     }
-
-    set({
-      loading: false,
-      uploadedProfileUrl: uploadedUrl,
-    });
-
-    return uploadedUrl;
-  } catch (err) {
-    set({ loading: false, error: err?.message || "Upload failed" });
-    throw err;
-  }
-},
+  },
 
   registerReferral: async (payload) => {
     try {
@@ -66,36 +80,35 @@ export const useAuthStore = create((set) => ({
   },
 
   loginWithPassword: async (data) => {
-  try {
-    set({ loading: true, error: null });
+    try {
+      set({ loading: true, error: null });
 
-    const res = await loginWithPasswordApi(data);
+      const res = await loginWithPasswordApi(data);
 
-    localStorage.setItem("token", res.data.data.token);
+      localStorage.setItem("token", res.data.data.token);
 
-    set({
-      token: res.data.data.token,
-      isAuthenticated: true,
-      loading: false,
-    });
+      set({
+        token: res.data.data.token,
+        isAuthenticated: true,
+        loading: false,
+      });
 
-    return res.data;
-  } catch (err) {
-    set({
-      loading: false,
-      error: err?.response?.data?.message || "Login failed",
-    });
+      return res.data;
+    } catch (err) {
+      set({
+        loading: false,
+        error: err?.response?.data?.message || "Login failed",
+      });
 
-    throw err;
-  }
-},
-
+      throw err;
+    }
+  },
 
   requestLoginOtp: async (payload) => {
     try {
       set({ loading: true, error: null });
 
-      const res =await requestLoginOtpApi(payload);
+      const res = await requestLoginOtpApi(payload);
 
       set({ loading: false, otpSent: true });
       return res?.data || res;
@@ -122,7 +135,7 @@ export const useAuthStore = create((set) => ({
         otpCode,
       });
 
-      const token = res.data.token;
+      const token = res.data.data.token;
       localStorage.setItem("token", token);
 
       set({
@@ -131,7 +144,7 @@ export const useAuthStore = create((set) => ({
         loading: false,
       });
 
-      return res;
+      return res.data.data;
     } catch (err) {
       set({
         loading: false,
@@ -224,25 +237,31 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  logout: async () => {
+  
+    try {
+      await requestLogoutApi();
 
-logout: async () => {
-  try {
-    await requestLogoutApi(); 
+      localStorage.removeItem("token");
 
-    localStorage.removeItem("token");
-    set({
-      token: null,
-      isAuthenticated: false,
-    });
-  } catch (error) {
-    console.error("Logout failed", error);
-    
-    localStorage.removeItem("token");
-    set({
-      token: null,
-      isAuthenticated: false,
-    });
-  }
-},
+      set({
+        token: null,
+        isAuthenticated: false,
+        profilePic: null,
+        uploadedProfileUrl: null,
+        error: null,
+        user: null,
+      });
+      useProfileStore.getState().clearProfile();
+      
+    } catch (error) {
+      console.log("Logout failed", error);
 
+      localStorage.removeItem("token");
+      set({
+        token: null,
+        isAuthenticated: false,
+      });
+    }
+  },
 }));
