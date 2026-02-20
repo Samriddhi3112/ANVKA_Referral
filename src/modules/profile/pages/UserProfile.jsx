@@ -19,10 +19,6 @@ const UserProfile = () => {
   const [show, setShow] = useState(false);
   const { uploadProfilePic } = useAuthStore();
 
-  const [profilePreview, setProfilePreview] = useState(
-    user?.data?.referral?.profilePicture || null
-  );
-
   useEffect(() => {
     if (user?.data?.referral?.profilePicture) {
       setProfilePreview(user.data.referral.profilePicture);
@@ -64,6 +60,7 @@ const UserProfile = () => {
     try {
       await logout();
       setShow(false);
+      toast.success("Logged out successfully.");
       navigate("/",{ replace: true });
     } catch (err) {
       console.error("Logout failed:", err);

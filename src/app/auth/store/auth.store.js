@@ -21,6 +21,7 @@ export const useAuthStore = create((set) => ({
   uploadedProfileUrl: null,
 
   user: null,
+
   clearProfile: () =>
     set({
       user: null,
@@ -28,7 +29,7 @@ export const useAuthStore = create((set) => ({
       error: null,
     }),
 
-     resetProfileImage: () =>
+  resetProfileImage: () =>
     set({
       profilePic: null,
       uploadedProfileUrl: null,
@@ -109,8 +110,11 @@ export const useAuthStore = create((set) => ({
       set({ loading: true, error: null });
 
       const res = await requestLoginOtpApi(payload);
-
-      set({ loading: false, otpSent: true });
+      set({
+        devOtp: res.data?.data?.otpCode || null,
+        loading: false,
+        otpSent: true,
+      });
       return res?.data || res;
     } catch (err) {
       const message =
@@ -164,7 +168,7 @@ export const useAuthStore = create((set) => ({
         throw new Error(res.data.message);
       }
 
-      set({ loading: false });
+      set({ loading: false, devOtp: res.data?.data?.otpCode || null });
       return res.data;
     } catch (err) {
       set({
@@ -185,7 +189,7 @@ export const useAuthStore = create((set) => ({
         throw new Error(res.data.message);
       }
 
-      set({ loading: false });
+      set({ loading: false, devOtp: res.data?.data?.otpCode || null });
       return res.data;
     } catch (err) {
       set({
@@ -238,7 +242,6 @@ export const useAuthStore = create((set) => ({
   },
 
   logout: async () => {
-  
     try {
       await requestLogoutApi();
 
@@ -253,7 +256,6 @@ export const useAuthStore = create((set) => ({
         user: null,
       });
       useProfileStore.getState().clearProfile();
-      
     } catch (error) {
       console.log("Logout failed", error);
 
@@ -264,4 +266,5 @@ export const useAuthStore = create((set) => ({
       });
     }
   },
+  
 }));

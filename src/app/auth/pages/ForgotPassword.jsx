@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FaChevronLeft } from "react-icons/fa6";
 import toast from "react-hot-toast";
-
 import Logo from "../../../assets/images/Logo.svg";
 import OrangeBox from "../../../assets/images/OrangeBox.png";
 import { useAuthStore } from "../store/auth.store";
@@ -40,11 +39,13 @@ const ForgotPassword = () => {
       const res = await forgotPasswordOtp({ phoneOrEmail });
 
       toast.success("OTP sent successfully" || res.message);
-      navigate("/verify-code", { state: { phoneOrEmail, devOtp: res?.data?.otpCode } });
+      navigate("/verify-code", {
+        state: { phoneOrEmail, devOtp: res?.data?.otpCode },
+      });
     } catch (err) {
       toast.error(
         "This email is not registered. Please create an account first." ||
-          err.message
+          err.message,
       );
     }
   };
@@ -74,7 +75,9 @@ const ForgotPassword = () => {
 
         <form onSubmit={handleSendOtp}>
           <div className="form-group">
-            <label className="label">Email Id <sup style={{color:"#fc3636"}}>*</sup></label>
+            <label className="label">
+              Email Id <sup style={{ color: "#fc3636" }}>*</sup>
+            </label>
             <input
               type="text"
               className="form-control"

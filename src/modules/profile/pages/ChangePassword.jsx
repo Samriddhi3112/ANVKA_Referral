@@ -34,7 +34,7 @@ const ChangePassword = () => {
 
     if (!currentPassword || !newPassword || !confirmPassword) {
       toast.error(
-        "Current password, new password, and confirm password are required."
+        "Current password, new password, and confirm password are required.",
       );
       return;
     }
@@ -149,7 +149,7 @@ const ChangePassword = () => {
                     </h6>
                     <input
                       style={{ backgroundColor: "white" }}
-                        type={showPassword ? "text" : "password"}
+                      type={showPassword ? "text" : "password"}
                       className="form-control"
                       placeholder="Enter current password"
                       value={formData.currentPassword}
@@ -175,7 +175,7 @@ const ChangePassword = () => {
                     </h6>
                     <input
                       style={{ backgroundColor: "white" }}
-                        type={showNewPassword ? "text" : "password"}
+                      type={showNewPassword ? "text" : "password"}
                       className="form-control"
                       placeholder="Enter new password"
                       value={formData.newPassword}
@@ -202,7 +202,7 @@ const ChangePassword = () => {
                     </h6>
                     <input
                       style={{ backgroundColor: "white" }}
-                        type={showConfirmPassword ? "text" : "password"}
+                      type={showConfirmPassword ? "text" : "password"}
                       className="form-control"
                       placeholder="Confirm new password"
                       value={formData.confirmPassword}

@@ -11,15 +11,21 @@ import CircularProgress from "../../../shared/components/CircularProgress";
 const VerifyCode = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { phoneOrEmail, devOtp } = location.state || {};
+  const { phoneOrEmail } = location.state || {};
   const [timer, setTimer] = useState(60);
 
-  const { verifyForgotPasswordOtp, resendPasswordOtp, loading } =
+  const { devOtp, verifyForgotPasswordOtp, resendPasswordOtp, loading } =
     useAuthStore();
 
   const [otp, setOtp] = useState("");
   const TOTAL_TIME = 60;
   const percent = (timer / TOTAL_TIME) * 100;
+
+  useEffect(() => {
+    if (devOtp) {
+      // setOtp(devOtp);
+    }
+  }, [devOtp]);
 
   useEffect(() => {
     if (timer === 0) return;
@@ -64,9 +70,10 @@ const VerifyCode = () => {
 
     try {
       await resendPasswordOtp({ phoneOrEmail });
+      console.log("OTP after resend:", devOtp);
       toast.success("OTP resent successfully");
       setTimer(60);
-      setOtp("");
+      // setOtp("");
     } catch (err) {
       toast.error(err.message || "Failed to resend OTP");
     }
@@ -110,8 +117,8 @@ const VerifyCode = () => {
                       percent > 60
                         ? "#22c55e"
                         : percent > 30
-                        ? "#f97316"
-                        : "#ef4444"
+                          ? "#f97316"
+                          : "#ef4444"
                     }
                   />
                 )}
@@ -167,6 +174,7 @@ const VerifyCode = () => {
               Resend OTP
             </span>
           </p>
+
           {devOtp && (
             <p style={{ marginTop: "10px", color: "#16a34a", fontWeight: 500 }}>
               OTP is: {devOtp}

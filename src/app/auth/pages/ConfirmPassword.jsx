@@ -88,14 +88,18 @@ const ConfirmPassword = () => {
 
             <div>
               <h5>Forget Password</h5>
-              <p>Don't worry! We've sent recovery instructions to your email.</p>
+              <p>
+                Don't worry! We've sent recovery instructions to your email.
+              </p>
               {/* <p>Set a strong password to secure your account</p> */}
             </div>
           </div>
 
           <form onSubmit={handleResetPassword}>
             <div className="form-group">
-              <label className="label">New Password <sup style={{color:"#fc3636"}}>*</sup></label>
+              <label className="label">
+                New Password <sup style={{ color: "#fc3636" }}>*</sup>
+              </label>
               <div className="password-wrapper">
                 <input
                   type={showPass ? "text" : "password"}
@@ -104,14 +108,19 @@ const ConfirmPassword = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter new password"
                 />
-                <span className="eye-icons" onClick={() => setShowPass(!showPass)}>
+                <span
+                  className="eye-icons"
+                  onClick={() => setShowPass(!showPass)}
+                >
                   {showPass ? <IoEyeOutline /> : <IoEyeOffOutline />}
                 </span>
               </div>
             </div>
 
             <div className="form-group">
-              <label className="label">Confirm Password <sup style={{color:"#fc3636"}}>*</sup></label>
+              <label className="label">
+                Confirm Password <sup style={{ color: "#fc3636" }}>*</sup>
+              </label>
               <div className="password-wrapper">
                 <input
                   type={showConfirmPass ? "text" : "password"}
@@ -120,7 +129,10 @@ const ConfirmPassword = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter password"
                 />
-                <span className="eye-icons" onClick={() => setShowConfirmPass(!showConfirmPass)}>
+                <span
+                  className="eye-icons"
+                  onClick={() => setShowConfirmPass(!showConfirmPass)}
+                >
                   {showConfirmPass ? <IoEyeOutline /> : <IoEyeOffOutline />}
                 </span>
               </div>
@@ -144,18 +156,11 @@ const ConfirmPassword = () => {
           <div className="p-4 text-center">
             <img src={successfulIcon} alt="Success" />
 
-            <h5 className="mt-3">
-              Success! Your password has been changed.
-            </h5>
+            <h5 className="mt-3">Success! Your password has been changed.</h5>
 
-            <p className="mb-4">
-              Please log in using your new credentials.
-            </p>
+            <p className="mb-4">Please log in using your new credentials.</p>
 
-            <button
-              className="btn-colored"
-              onClick={() => navigate("/")}
-            >
+            <button className="btn-colored" onClick={() => navigate("/")}>
               Go to Login
             </button>
           </div>

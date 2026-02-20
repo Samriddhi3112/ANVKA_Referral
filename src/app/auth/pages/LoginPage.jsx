@@ -16,7 +16,7 @@ import "react-phone-input-2/lib/style.css";
 const LoginPage = () => {
   const navigate = useNavigate();
   const { loginWithPassword, requestLoginOtp, loading } = useAuthStore();
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -96,7 +96,7 @@ const LoginPage = () => {
     } catch (err) {
       toast.error(
         err?.response?.data?.message ||
-          "Number not registered. Please sign up first."
+          "Number not registered. Please sign up first.",
       );
     }
   };

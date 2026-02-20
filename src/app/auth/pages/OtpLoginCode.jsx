@@ -10,12 +10,19 @@ import { useAuthStore } from "../store/auth.store";
 import CircularProgress from "../../../shared/components/CircularProgress";
 
 const OtpLoginCode = () => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { devOtp, verifyLoginOtp, requestLoginOtp, loading } = useAuthStore();
 
-  const { verifyLoginOtp, requestLoginOtp, loading } = useAuthStore();
+  useEffect(() => {
+    if (devOtp) {
+      // setDevOtpState(devOtp);
+      // setOtp(devOtp);
+    }
+  }, [devOtp]);
 
-  const { phoneOrEmail, countryCode, devOtp } = location.state || {};
+  const { phoneOrEmail, countryCode } = location.state || {};
+
   const phone = phoneOrEmail;
 
   const [otp, setOtp] = useState("");
@@ -123,8 +130,8 @@ const OtpLoginCode = () => {
                       percent > 60
                         ? "#22c55e"
                         : percent > 30
-                        ? "#f97316"
-                        : "#ef4444"
+                          ? "#f97316"
+                          : "#ef4444"
                     }
                   />
                 )}

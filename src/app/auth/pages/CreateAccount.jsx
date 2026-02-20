@@ -18,6 +18,7 @@ const CreateAccount = () => {
     setProfilePic,
     profilePic: selectedProfilePic,
   } = useAuthStore();
+
   const { resetProfileImage } = useAuthStore();
 
   const [form, setForm] = useState({
@@ -29,6 +30,7 @@ const CreateAccount = () => {
     countryCode: "+91",
     agree: false,
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -36,6 +38,7 @@ const CreateAccount = () => {
   useEffect(() => {
     resetProfileImage();
   }, [resetProfileImage]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });

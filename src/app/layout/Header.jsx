@@ -12,6 +12,7 @@ import { useProfileStore } from "../../modules/profile/store/profile.store";
 // import { useProfileStore } from "../store/profile.store";
 import DpUpload from "../../assets/images/DpUpload.png";
 import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -48,7 +49,8 @@ const Header = () => {
     try {
       await logout();
       setShowModal(false);
-      navigate("/",{ replace: true });
+      toast.success("Logged out successfully.");
+      navigate("/", { replace: true });
     } catch (err) {
       console.error("Logout failed:", err);
     }
