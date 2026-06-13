@@ -44,6 +44,7 @@ import UserProfile from "../../modules/profile/pages/UserProfile";
 import ChangePassword from "../../modules/profile/pages/ChangePassword";
 import EditFacilitatorInformation from "../../modules/profile/pages/EditFacilitatorInformation";
 import ReferralEarnings from "../../modules/referralEarnings/pages/ReferralEarnings";
+import BankDetails from "../../modules/referralEarnings/Bank Details/pages/bankDetails";
 
 const AppRoutes = () => {
   return (
@@ -72,6 +73,7 @@ const AppRoutes = () => {
             element={<EditFacilitatorInformation />}
           />
           <Route path="/referral-earnings" element={<ReferralEarnings />} />
+          <Route path="/bank-details" element={<BankDetails />} />
         </Route>
       </Route>
 

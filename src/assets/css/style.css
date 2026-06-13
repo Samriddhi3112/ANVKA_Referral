@@ -12,6 +12,69 @@ body {
   display: inline-block;
 }
 
+/* .WrapperArea {
+  min-height: 100vh;
+} */
+
+.WrapperBox {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+}
+
+.patientGridWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.Paginations {
+  margin-top: auto;
+}
+
+.datePickerBox {
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  width: 200px;
+}
+
+.patientGridWrapper {
+  min-height: calc(100vh - 280px);
+  display: flex;
+  flex-direction: column;
+}
+
+.Paginations {
+  margin-top: auto;
+}
+
+/* .WrapperBox {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 120px);
+} */
+
+.calendarIcon {
+  color: #ff7a00;
+  margin-right: 8px;
+}
+
+.datePickerBox input {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.noDataWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
 .plus-icon {
   position: absolute;
   bottom: 4px;
@@ -1279,9 +1342,9 @@ header .right .dropdown-menu a {text-align: center;color: #1A1C1E;font-weight: 6
 header .right .dropdown-menu a:hover {color: var(--brandColor);background-color: transparent;}
 
 .notificationBody .notificationBox.showNotification {right: 0;}
-.notificationBody .notificationBox {position: fixed;right: -300px;background-color: #fff;border-radius: 6px;width: 300px;height: calc(100vh - 60px);top: 60px;z-index: 99;padding: 25px;transition: all 0.5s ease;}
+.notificationBody .notificationBox {position: fixed;right: -300px;background-color: #fff;border-radius: 6px;width: 300px;height: calc(100vh - 60px);top: 60px;z-index: 99;transition: all 0.5s ease;}
 .notificationBody .notificationBox h4.title {color: #000929;font-size: 18px;font-weight: 500;margin: 0 0 20px 0;}
-.notificationBody .notificationBox ul li {position: relative;padding: 0 0 0 60px;margin: 0 0 25px 0;}
+.notificationBody .notificationBox ul li {position: relative}
 .notificationBody .notificationBox ul li span {position: absolute;background-color: #FFF5EF;display: inline-block;width: 42px;height: 42px;text-align: center;line-height: 42px;border-radius: 50%;left: 0;}
 .notificationBody .notificationBox ul li h5 {font-size: 14px;color: #000929;}
 .notificationBody .notificationBox ul li p {color: #475569;font-weight: 300;font-size: 12px;}
@@ -1302,8 +1365,297 @@ header .right .dropdown-menu a:hover {color: var(--brandColor);background-color:
     padding: 20px 20px 20px 20px;
     width: 100%;
     height: 100%;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     background-color: #f9fafb;
+}
+
+.notificationBox {
+  width: 360px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.notificationBox ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  flex: 1;
+  overflow-y: auto;
+
+  /* modern scroll spacing */
+  scrollbar-width: thin;
+  scrollbar-color: #c7c7ff transparent;
+
+  padding-right: 6px;
+}
+.notificationBox ul::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notificationBox ul::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notificationBox ul::-webkit-scrollbar-thumb {
+  background: #c7c7ff;
+  border-radius: 10px;
+}
+
+.notificationBox ul::-webkit-scrollbar-thumb:hover {
+  background: #a5a5ff;
+}
+/* ===== BELL ICON ===== */
+.bellIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.bellIcon:hover {
+  background: #f4f6ff;
+}
+
+.bellBadge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: #ff3b30;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  height: 18px;
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+}
+
+/* ===== NOTIFICATION PANEL ===== */
+.notificationBody {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 380px;
+  height: 100vh;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.notificationBox {
+  position: absolute;
+  right: -420px;
+  top: 0;
+  width: 380px;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+}
+
+.notificationBox.showNotification {
+  right: 0;
+}
+
+/* HEADER */
+.notificationBox .title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.notificationBox .Close {
+  font-size: 18px;
+  cursor: pointer;
+  color: #666;
+}
+
+/* TOP ACTION BAR */
+.notificationBox .btn-link {
+  font-size: 13px;
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+/* LIST */
+.notificationBox ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.notificationItem {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #f1f1f1;
+  transition: 0.2s;
+}
+
+.notificationItem:hover {
+  background: #f9f9ff;
+}
+
+.notificationItem.read {
+  opacity: 0.6;
+}
+
+/* ICON */
+.iconBox {
+  width: 38px;
+  height: 38px;
+  background: #f4f6ff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CONTENT */
+.contentBox {
+  flex: 1;
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.contentBox h5 {
+  font-size: 14px;
+  margin: 0;
+  font-weight: 600;
+  color: #111;
+}
+
+.contentBox p {
+  font-size: 12px;
+  margin: 4px 0 0;
+  color: #666;
+}
+
+/* MARK READ BUTTON */
+.markBtn {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  color: #4f46e5;
+  cursor: pointer;
+}
+
+.markBtn:hover {
+  text-decoration: underline;
+}
+
+.contentBox h5 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+/* MAIN CARD */
+.notificationItem {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  transition: 0.2s;
+  align-items: flex-start;
+}
+
+.notificationItem:hover {
+  background: #f6f8ff;
+}
+
+.notificationItem.read {
+  opacity: 0.6;
+}
+
+/* ICON FIX */
+.iconBox {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 50%;
+  background: #fff1e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBox img {
+  width: 18px;
+  height: 18px;
+}
+
+/* CONTENT FIX */
+.contentBox {
+  flex: 1;
+  min-width: 0;
+}
+
+/* TOP ROW ALIGNMENT */
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* TITLE FIX */
+.topRow h5 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+
+  /* clean ellipsis */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* MESSAGE FIX */
+.contentBox p {
+  font-size: 12px;
+  color: #666;
+  margin: 4px 0 0;
+
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* BUTTON FIX */
+.markBtn {
+  font-size: 12px;
+  border: none;
+  background: transparent;
+  color: #2f6bff;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.markBtn:hover {
+  text-decoration: underline;
 }
 
 .Small-Wrapper {
