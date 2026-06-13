@@ -15,6 +15,7 @@ import { useProfileStore } from "../store/profile.store";
 
 const UserProfile = () => {
   const navigate = useNavigate();
+  const [profilePreview, setProfilePreview] = useState("");
   const { user, fetchProfile, updateProfile, logout } = useProfileStore();
   const [show, setShow] = useState(false);
   const { uploadProfilePic } = useAuthStore();
