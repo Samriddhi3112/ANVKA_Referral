@@ -1738,7 +1738,7 @@ background-color: var(--white);border-radius: 12px;padding: 15px 10px;
 .lastTransactions .header {margin: 0 0 30px 0;display: flex;justify-content: space-between;align-items: center;}
 .lastTransactions .header h4 {margin: 0;font-weight:500;font-size:18px; color: rgba(17, 24, 39, 1);}
 .lastTransactions .filterBtn {border: 1px solid #E5E7EB;border-radius: 5px;padding: 8px 25px;font-size: 14px;color: #1F2937;}
-.lastTransactions ul li {position: relative; padding: 0 0 0 55px;display: flex;justify-content: space-between;align-items: center;margin: 0 0 30px 0;}
+.lastTransactions ul li {position: relative; padding: 0 0 0 55px;display: flex;justify-content: space-between;align-items: center}
 .lastTransactions ul li span {position: absolute;width: 44px;height: 44px;line-height: 44px; text-align: center; left: 0;top: 50%;transform: translateY(-50%);  border-radius: 50%;background-color: #EFEFEF;}
 .lastTransactions ul li figcaption h5 {color: #1F2937;font-size: 15px;margin: 0 0 5px 0;}
 .lastTransactions ul li figcaption p {color: #6B7280;font-size: 14px;}

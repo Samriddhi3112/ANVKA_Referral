@@ -1,4 +1,4 @@
-import { axiosInstance } from "../../../services/apiClient";
+import { axiosInstance } from "../../../app/auth/services/apiClient";
 
 export const getWalletApi = () => {
   return axiosInstance.get("/referral/wallet");

@@ -45,6 +45,7 @@ import ChangePassword from "../../modules/profile/pages/ChangePassword";
 import EditFacilitatorInformation from "../../modules/profile/pages/EditFacilitatorInformation";
 import ReferralEarnings from "../../modules/referralEarnings/pages/ReferralEarnings";
 import BankDetails from "../../modules/referralEarnings/Bank Details/pages/bankDetails";
+import WithdrawMoney from "../../modules/referralEarnings/withdrawals/pages/WithdrawMoney";
 
 const AppRoutes = () => {
   return (
@@ -73,7 +74,8 @@ const AppRoutes = () => {
             element={<EditFacilitatorInformation />}
           />
           <Route path="/referral-earnings" element={<ReferralEarnings />} />
-          <Route path="/bank-details" element={<BankDetails />} />
+          <Route path="/referral-earnings/bank-details" element={<BankDetails />} />
+          <Route path="/referral-earnings/withdraw-money" element={<WithdrawMoney />} />
         </Route>
       </Route>
 
