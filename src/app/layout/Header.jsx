@@ -4,6 +4,7 @@ import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { FaRegBell } from "react-icons/fa";
 import Dropdown from "react-bootstrap/Dropdown";
 import { IoIosArrowDown } from "react-icons/io";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 import bell from "../../assets/images/bell.svg";
 import LogoutIcon from "../../assets/images/LogoutIcon.svg";
 import Modal from "react-bootstrap/Modal";
@@ -42,7 +43,8 @@ const Header = () => {
     "/withdraw-money": "Withdraw Money",
     "/profile": "Profile Completion",
     "/change-password": "Change Password",
-    "/bank-details": "Referral Earnings"
+    "/bank-details": "Referral Earnings",
+    "/static-content" :"Help & Info"
   };
 
   const getPageTitle = () => {
@@ -59,6 +61,9 @@ const Header = () => {
 
   const userName = user?.data?.referral?.fullName || "User";
   const profileImage = user?.data?.referral?.profilePicture || DpUpload;
+
+  // unreadCount from API is the source of truth
+  const hasUnread = Number(unreadCount) > 0;
 
   useEffect(() => {
     fetchProfile();
@@ -80,6 +85,16 @@ const Header = () => {
   const handleMarkSingleRead = async (id) => {
     try {
       await markAsRead(id);
+      await getUnreadCount();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleMarkAllRead = async () => {
+    try {
+      await markAllAsRead();
+      await getUnreadCount();
     } catch (err) {
       console.error(err);
     }
@@ -105,30 +120,37 @@ const Header = () => {
             showNotification ? "showNotification" : ""
           }`}
         >
-          <div className="d-flex justify-content-between align-items-center">
-            <h4 className="title">Notification</h4>
+          <div className="notifHeader">
+            <h4 className="title">Notifications</h4>
 
             <a className="Close" onClick={handleNotification}>
               <IoClose />
             </a>
           </div>
 
-          <div className="d-flex justify-content-between align-items-center mb-3">
+          <div className="notifSubHeader">
+            <span className="notifCount">
+              {unreadCount > 0
+                ? `${unreadCount} unread`
+                : "You're all caught up"}
+            </span>
+
             <button
-              className="btn btn-sm btn-link"
-              disabled={unreadCount === 0}
-              onClick={markAllAsRead}
+              className="markAllBtn"
+              disabled={!hasUnread}
+              onClick={handleMarkAllRead}
             >
-              Mark All Read
+              Mark all read
             </button>
           </div>
 
-          <ul>
+          <ul className="notifList">
             {notifications?.length > 0 ? (
               notifications.map((item) => (
                 <li
                   key={item._id}
-                  className={`notificationItem ${item.isRead ? "read" : ""}`}
+                  className={`notificationItem ${item.isRead ? "read" : "unread"}`}
+                  onClick={() => !item.isRead && handleMarkSingleRead(item._id)}
                 >
                   <div className="iconBox">
                     <img src={bell} alt="" />
@@ -140,14 +162,7 @@ const Header = () => {
                         {item?.title || "Notification"}
                       </h5>
 
-                      {!item.isRead && (
-                        <button
-                          className="markBtn"
-                          onClick={() => handleMarkSingleRead(item._id)}
-                        >
-                          Mark Read
-                        </button>
-                      )}
+                      {!item.isRead && <span className="unreadDot" />}
                     </div>
 
                     <p>{item?.message}</p>
@@ -155,14 +170,7 @@ const Header = () => {
                 </li>
               ))
             ) : (
-              <li
-                style={{
-                  textAlign: "center",
-                  padding: "20px",
-                }}
-              >
-                No Notifications Found
-              </li>
+              <li className="emptyState">No Notifications Found</li>
             )}
           </ul>
         </div>
@@ -175,8 +183,22 @@ const Header = () => {
         </div>
 
         <div className="mainHeader">
-          <div className="left">
-            <h4>{getPageTitle()}</h4>
+          <div className="left" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <a
+              className="backArrow"
+              onClick={() => navigate(-1)}
+              style={{
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                lineHeight: 0,
+                color: "#F57C15",
+              }}
+            >
+              <MdKeyboardArrowLeft size={26} />
+            </a>
+            <h4 style={{ margin: 0 }}>{getPageTitle()}</h4>
           </div>
 
           <div className="right">

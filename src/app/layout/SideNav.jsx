@@ -6,6 +6,7 @@ import postarrivalIcon from "../../assets/images/post-arrival.svg";
 import completionIcon from "../../assets/images/profile-consultataion.svg";
 import referredTreatIcon from "../../assets/images/referred-treatment.svg";
 import referrelearnings from "../../assets/images/referrel-earnings.svg";
+import staticContent from "../../assets/images/Frame.png"
 import { useLocation } from "react-router-dom";
 
 const Sidenav = () => {
@@ -100,6 +101,28 @@ const Sidenav = () => {
             Profile
           </NavLink>
         </li>
+        <li
+          className={isExactActive("/static-content") ? "active" : ""}
+        >
+          <NavLink to="/static-content">
+            <span>
+              <img src={staticContent} alt="" />
+            </span>
+            Help & Info
+          </NavLink>
+        </li>
+        {/* <li
+          className={
+            isActive(["/profile", "/change-password"]) ? "active" : ""
+          }
+        >
+          <NavLink to="/static-content">
+            <span>
+              <img src={patients} alt="Profile" />
+            </span>
+            Help and Info
+          </NavLink>
+        </li> */}
       </ul>
     </div>
   );

@@ -46,6 +46,7 @@ import EditFacilitatorInformation from "../../modules/profile/pages/EditFacilita
 import ReferralEarnings from "../../modules/referralEarnings/pages/ReferralEarnings";
 import BankDetails from "../../modules/referralEarnings/Bank Details/pages/bankDetails";
 import WithdrawMoney from "../../modules/referralEarnings/withdrawals/pages/WithdrawMoney";
+import StaticContent from "../../modules/staticContent/pages/staticContent";
 
 const AppRoutes = () => {
   return (
@@ -75,6 +76,7 @@ const AppRoutes = () => {
           />
           <Route path="/referral-earnings" element={<ReferralEarnings />} />
           <Route path="/referral-earnings/bank-details" element={<BankDetails />} />
+          <Route path="/static-content" element={<StaticContent />} />
           <Route path="/referral-earnings/withdraw-money" element={<WithdrawMoney />} />
         </Route>
       </Route>

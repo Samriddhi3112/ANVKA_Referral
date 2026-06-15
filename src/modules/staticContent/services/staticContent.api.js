@@ -1,4 +1,4 @@
-import { axiosInstance } from "../../../services/apiClient";
+import { axiosInstance } from "../../../app/auth/services/apiClient";
 
 export const getStaticContentApi = (type) => {
   return axiosInstance.get("/referral/static-content", {

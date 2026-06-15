@@ -88,27 +88,14 @@ const OverviewPage = () => {
                   minDate={startDate}
                 />
               </div>
+
+              {/* Reset Button */}
               <div
+                className="resetFilterBtn"
                 onClick={handleResetDates}
                 title="Reset Filters"
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  border: "1px solid #000",
-                  borderRadius: "8px",
-                  background: "#fff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                }}
               >
-                <IoRefresh
-                  style={{
-                    color: "#ff7a00",
-                    fontSize: "20px",
-                  }}
-                />
+                <IoRefresh className="resetIcon" />
               </div>
             </div>
           </div>
