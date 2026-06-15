@@ -41,10 +41,11 @@ const Header = () => {
     "/referrals/treatment": "Referred Treatment",
     "/referral-earnings": "Referral Earnings",
     "/withdraw-money": "Withdraw Money",
-    "/profile": "Profile Completion",
+    "/profile": "Profile",
     "/change-password": "Change Password",
     "/bank-details": "Referral Earnings",
-    "/static-content" :"Help & Info"
+    "/static-content" :"Help & Info",
+    "/leads":"Leads Management"
   };
 
   const getPageTitle = () => {

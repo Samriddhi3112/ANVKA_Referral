@@ -204,7 +204,7 @@ const LoginPage = () => {
                 />
 
                 <div className="footer-login-pad">
-                  <button className="btn-colored" disabled={loading}>
+                  <button  type="submit" className="btn-colored" disabled={loading}>
                     {loading ? "Sending OTP..." : "Login"}
                   </button>
                 </div>
@@ -252,7 +252,7 @@ const LoginPage = () => {
                 </div>
 
                 <div className="footer-login-pad">
-                  <button className="btn-colored" disabled={loading}>
+                  <button  type="submit" className="btn-colored" disabled={loading}>
                     {loading ? "Logging in..." : "Login"}
                   </button>
                 </div>

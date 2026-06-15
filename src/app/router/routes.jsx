@@ -47,6 +47,8 @@ import ReferralEarnings from "../../modules/referralEarnings/pages/ReferralEarni
 import BankDetails from "../../modules/referralEarnings/Bank Details/pages/bankDetails";
 import WithdrawMoney from "../../modules/referralEarnings/withdrawals/pages/WithdrawMoney";
 import StaticContent from "../../modules/staticContent/pages/staticContent";
+import LeadDetail from "../../modules/leads/pages/leadsDetail";
+import LeadsListing from "../../modules/leads/pages/leadsListing";
 
 const AppRoutes = () => {
   return (
@@ -78,6 +80,8 @@ const AppRoutes = () => {
           <Route path="/referral-earnings/bank-details" element={<BankDetails />} />
           <Route path="/static-content" element={<StaticContent />} />
           <Route path="/referral-earnings/withdraw-money" element={<WithdrawMoney />} />
+          <Route path="/leads" element={<LeadsListing />} />
+          <Route path="/leads/:id" element={<LeadDetail />} />
         </Route>
       </Route>
 

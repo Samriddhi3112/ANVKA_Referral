@@ -28,6 +28,14 @@ const Sidenav = () => {
             Overview
           </NavLink>
         </li>
+        <li className={isActive(["/leads"]) ? "active" : ""}>
+          <NavLink to="/leads">
+            <span>
+              <img src={patients} alt="Patients" />
+            </span>
+            Lead Management
+          </NavLink>
+        </li>
 
         <li className={isActive(["/registered-patients"]) ? "active" : ""}>
           <NavLink to="/registered-patients">
