@@ -78,7 +78,7 @@ export const useProfileStore = create((set) => ({
     console.log("Logout API failed", error);
   } finally {
     // 2️⃣ Token clear
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
 
     // 3️⃣ Auth related sab kuch reset
     set({

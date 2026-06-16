@@ -11,7 +11,16 @@ body {
   position: relative;   /* MOST IMPORTANT */
   display: inline-block;
 }
+/* Sidenav react icons — default grey, active/hover orange */
+.SidenavBar ul li a span svg {
+  color: #6b7280; /* default grey */
+  transition: color 0.2s;
+}
 
+.SidenavBar ul li.active a span svg,
+.SidenavBar ul li a:hover span svg {
+  color: #F57C15; /* orange on active/hover */
+}
 /* .WrapperArea {
   min-height: 100vh;
 } */
@@ -1280,7 +1289,7 @@ input:checked~.checkmark {background-color: var(--brandColor);}
 }
 
 .SidenavBar ul li a span {
-    font-size: 13px;
+    font-size: 18px;
     display: inline-block;
     color: var(--brandColor);
     position: absolute;
@@ -1700,7 +1709,69 @@ header .right .dropdown-menu a:hover {color: var(--brandColor);background-color:
   justify-content: center;
   border: 2px solid #fff;
 }
+/* ─── PhoneInput override — scoped to Add Lead modal only ─── */
+.addLeadModal .phone-input-container {
+  width: 100% !important;
+}
 
+.addLeadModal .phone-input-container .flag-dropdown {
+  background: #e5e7eb99 !important;
+  border: 1px solid #ced4da !important;
+  border-right: none !important;
+  border-radius: 8px 0 0 8px !important;
+  padding: 0 8px !important;
+}
+.react-tel-input .flag-dropdown.open .selected-flag{
+  background-color:none;
+}
+.react-tel-input .flag-dropdown.open .selected-flag :focus{
+  background-color:none !important;
+}
+.addLeadModal .phone-input-container .flag-dropdown.open {
+  border-radius: 8px 0 0 8px !important;
+}
+
+.addLeadModal .phone-input-container .selected-flag {
+  width: 48px !important;
+  padding: 0 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  /* border-radius: 8px 0 0 8px !important; */
+}
+
+.addLeadModal .phone-input-container .form-control {
+  width: 100% !important;
+  height: 48px !important;
+  font-size: 14px !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 0 8px 8px 0 !important;
+  /* Override the commonForm padding — give space for flag+dialcode */
+  padding-left: 70px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  color: #111827 !important;
+  box-sizing: border-box !important;
+}
+
+.addLeadModal .phone-input-container .form-control:focus {
+  border-color: #F57C15 !important;
+  box-shadow: 0 0 0 0.15rem rgba(245, 124, 21, 0.15) !important;
+  outline: none !important;
+}
+
+.addLeadModal .phone-input-container .form-control.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.addLeadModal .phone-input-container .form-control::placeholder {
+  color: #9CA3AF !important;
+}
+
+/* Dropdown search box */
+.addLeadModal .phone-input-container .search-box {
+  width: 90% !important;
+  font-size: 13px !important;
+}
 /* ===== NOTIFICATION PANEL ===== */
 .notificationBody {
   position: fixed;

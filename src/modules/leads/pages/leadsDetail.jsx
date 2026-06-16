@@ -170,14 +170,14 @@ const LeadDetail = () => {
                     : "—"
                 }
               />
-              <DetailRow
+              {/* <DetailRow
                 label="Converted At"
                 value={
                   leadDetail.convertedAt
                     ? new Date(leadDetail.convertedAt).toLocaleString("en-IN")
                     : "—"
                 }
-              />
+              /> */}
               <DetailRow
                 label="Created At"
                 value={

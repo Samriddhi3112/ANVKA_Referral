@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import toast from "react-hot-toast";
-import { MdKeyboardArrowRight, MdContentCopy } from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import { useLeadsStore } from "../store/leads.store";
 
-// ─── Pagination (same pattern used across the app) ────────────────────────
+// ─── Pagination ────────────────────────────────────────────────────────────
 const Pagination = ({ currentPage, total, limit, onPageChange }) => {
   const totalPages = Math.ceil(total / limit);
   if (totalPages <= 1) return null;
@@ -49,11 +51,11 @@ const Pagination = ({ currentPage, total, limit, onPageChange }) => {
 
 // ─── Status Badge ──────────────────────────────────────────────────────────
 const STATUS_STYLES = {
-  invited: { bg: "#FEF4EB", color: "#D97B3A", label: "Invited" },
-  registered: { bg: "#E8F3FF", color: "#2D7DD2", label: "Registered" },
-  profile_completed: { bg: "#EAF7EE", color: "#3CA55C", label: "Profile Completed" },
-  converted: { bg: "#EAF7EE", color: "#2E9E5B", label: "Converted" },
-  default: { bg: "#F1F1F4", color: "#6B6B6B", label: "—" },
+  invited: { bg: "#FEF4EB", color: "#D97B3A" },
+  registered: { bg: "#E8F3FF", color: "#2D7DD2" },
+  profile_completed: { bg: "#EAF7EE", color: "#3CA55C" },
+  converted: { bg: "#EAF7EE", color: "#2E9E5B" },
+  default: { bg: "#F1F1F4", color: "#6B6B6B" },
 };
 
 const StatusBadge = ({ status }) => {
@@ -73,7 +75,7 @@ const StatusBadge = ({ status }) => {
         whiteSpace: "nowrap",
       }}
     >
-      {status ? status.replace(/_/g, " ") : s.label}
+      {status ? status.replace(/_/g, " ") : "—"}
     </span>
   );
 };
@@ -81,8 +83,8 @@ const StatusBadge = ({ status }) => {
 // ─── Add Lead Modal ─────────────────────────────────────────────────────────
 const initialForm = {
   fullName: "",
-  countryCode: "+91",
   phone: "",
+  countryCode: "+91",
   email: "",
 };
 
@@ -97,13 +99,25 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
+  const handlePhoneChange = (value, data) => {
+    const dialCode = data.dialCode || "";
+    const phoneOnly = value.slice(dialCode.length); // strip dial code prefix
+
+    setForm((prev) => ({
+      ...prev,
+      phone: phoneOnly,
+      countryCode: `+${dialCode}`,
+    }));
+
+    if (errors.phone) setErrors((prev) => ({ ...prev, phone: "" }));
+  };
+
   const validate = () => {
     const errs = {};
     if (!form.fullName.trim()) errs.fullName = "Full name is required.";
     if (!form.phone.trim()) errs.phone = "Phone number is required.";
-    else if (!/^\d{6,15}$/.test(form.phone.trim()))
+    else if (form.phone.trim().length < 6)
       errs.phone = "Enter a valid phone number.";
-    if (!form.countryCode.trim()) errs.countryCode = "Required";
     if (!form.email.trim()) errs.email = "Email is required.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()))
       errs.email = "Enter a valid email.";
@@ -121,7 +135,7 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
     try {
       await createLead({
         fullName: form.fullName.trim(),
-        countryCode: form.countryCode.trim(),
+        countryCode: form.countryCode,
         phone: form.phone.trim(),
         email: form.email.trim(),
       });
@@ -142,14 +156,15 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal show={show} onHide={handleClose} centered dialogClassName="addLeadModal">
       <Modal.Body>
         <div className="commonForm p-2">
           <h4 className="Title mb-3">Add Lead</h4>
 
           <form onSubmit={handleSubmit}>
+            {/* Full Name */}
             <div className="form-group">
-              <h6>Full Name</h6>
+              <h6>Full Name <sup style={{ color: "#fc3636" }}>*</sup></h6>
               <input
                 type="text"
                 name="fullName"
@@ -159,54 +174,38 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
                 placeholder="Enter full name"
               />
               {errors.fullName && (
-                <div className="invalid-feedback d-block" style={{ fontSize: "13px", color: "#dc3545", marginTop: "4px" }}>
+                <div style={{ fontSize: "13px", color: "#dc3545", marginTop: "4px" }}>
                   {errors.fullName}
                 </div>
               )}
             </div>
 
-            <div className="row">
-              <div className="col-4">
-                <div className="form-group">
-                  <h6>Code</h6>
-                  <input
-                    type="text"
-                    name="countryCode"
-                    className={`form-control ${errors.countryCode ? "is-invalid" : ""}`}
-                    value={form.countryCode}
-                    onChange={handleChange}
-                    placeholder="+91"
-                  />
-                  {errors.countryCode && (
-                    <div className="invalid-feedback d-block" style={{ fontSize: "13px", color: "#dc3545", marginTop: "4px" }}>
-                      {errors.countryCode}
-                    </div>
-                  )}
+            {/* Phone */}
+            <div className="form-group">
+              <h6>
+                Phone Number <sup style={{ color: "#fc3636" }}>*</sup>
+              </h6>
+              <PhoneInput
+                country="in"
+                value={form.countryCode.replace("+", "") + form.phone}
+                onChange={handlePhoneChange}
+                enableSearch
+                countryCodeEditable={false}
+                inputClass={`form-control${errors.phone ? " is-invalid" : ""}`}
+                containerClass="phone-input-container"
+                containerStyle={{ width: "100%", }}
+                placeholder="Enter phone number"
+              />
+              {errors.phone && (
+                <div style={{ fontSize: "13px", color: "#dc3545", marginTop: "4px" }}>
+                  {errors.phone}
                 </div>
-              </div>
-
-              <div className="col-8">
-                <div className="form-group">
-                  <h6>Phone Number</h6>
-                  <input
-                    type="text"
-                    name="phone"
-                    className={`form-control ${errors.phone ? "is-invalid" : ""}`}
-                    value={form.phone}
-                    onChange={handleChange}
-                    placeholder="Enter phone number"
-                  />
-                  {errors.phone && (
-                    <div className="invalid-feedback d-block" style={{ fontSize: "13px", color: "#dc3545", marginTop: "4px" }}>
-                      {errors.phone}
-                    </div>
-                  )}
-                </div>
-              </div>
+              )}
             </div>
 
+            {/* Email */}
             <div className="form-group">
-              <h6>Email</h6>
+              <h6>Email <sup style={{ color: "#fc3636" }}>*</sup></h6>
               <input
                 type="email"
                 name="email"
@@ -216,7 +215,7 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
                 placeholder="Enter email address"
               />
               {errors.email && (
-                <div className="invalid-feedback d-block" style={{ fontSize: "13px", color: "#dc3545", marginTop: "4px" }}>
+                <div style={{ fontSize: "13px", color: "#dc3545", marginTop: "4px" }}>
                   {errors.email}
                 </div>
               )}
@@ -265,14 +264,8 @@ const LeadsListing = () => {
     getLeads({ page: 1 });
   };
 
-//   const handleCopyLink = (link) => {
-//     navigator.clipboard.writeText(link);
-//     toast.success("Referral link copied.");
-//   };
-
   return (
     <>
-
       <div className="WrapperArea">
         <div className="WrapperBox">
           <div className="TitleBox">
@@ -309,14 +302,10 @@ const LeadsListing = () => {
                     {leads.map((lead) => (
                       <tr key={lead.id}>
                         <td>{lead.fullName}</td>
-                        <td>
-                          {lead.countryCode} {lead.phone}
-                        </td>
+                        <td>{lead.countryCode} {lead.phone}</td>
                         <td>{lead.email}</td>
                         <td>{lead.referralCode}</td>
-                        <td>
-                          <StatusBadge status={lead.status} />
-                        </td>
+                        <td><StatusBadge status={lead.status} /></td>
                         <td>
                           {lead.createdAt
                             ? new Date(lead.createdAt).toLocaleDateString("en-IN")

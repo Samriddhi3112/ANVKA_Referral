@@ -152,7 +152,7 @@ const OverviewPage = () => {
             </div>
           </div>
 
-          <div className="col-lg-4">
+          {/* <div className="col-lg-4">
             <div className="dashboardBox five">
               <span>
                 <img src={dashboard4} alt="img" />
@@ -162,7 +162,7 @@ const OverviewPage = () => {
 
               <p>Post- Arrival Care</p>
             </div>
-          </div>
+          </div> */}
 
           <div className="col-lg-4">
             <div className="dashboardBox six">

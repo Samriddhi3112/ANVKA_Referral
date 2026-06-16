@@ -35,12 +35,12 @@ const PatientGrid = ({ page, setPage }) => {
               border: "1px dashed #d9d9d9",
             }}
           >
-            <h5>No Registered Patients Found</h5>
+            <h5>No Records Found</h5>
 
-            <p style={{ color: "#777", marginBottom: 0 }}>
+            {/* <p style={{ color: "#777", marginBottom: 0 }}>
               There are currently no registered patients available for the
               selected date range.
-            </p>
+            </p> */}
           </div>
         </div>
       )}

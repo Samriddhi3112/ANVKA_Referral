@@ -13,8 +13,8 @@ import {
 } from "../services/auth.api";
 
 export const useAuthStore = create((set) => ({
-  token: localStorage.getItem("token"),
-  isAuthenticated: !!localStorage.getItem("token"),
+  token: sessionStorage.getItem("token"),
+  isAuthenticated: !!sessionStorage.getItem("token"),
   loading: false,
   error: null,
   profilePic: null,
@@ -86,7 +86,7 @@ export const useAuthStore = create((set) => ({
 
       const res = await loginWithPasswordApi(data);
 
-      localStorage.setItem("token", res.data.data.token);
+      sessionStorage.setItem("token", res.data.data.token);
 
       set({
         token: res.data.data.token,
@@ -140,7 +140,7 @@ export const useAuthStore = create((set) => ({
       });
 
       const token = res.data.data.token;
-      localStorage.setItem("token", token);
+      sessionStorage.setItem("token", token);
 
       set({
         token,
@@ -245,7 +245,8 @@ export const useAuthStore = create((set) => ({
     try {
       await requestLogoutApi();
 
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
+      window.dispatchEvent(new Event("auth:logout"));
 
       set({
         token: null,
@@ -259,7 +260,8 @@ export const useAuthStore = create((set) => ({
     } catch (error) {
       console.log("Logout failed", error);
 
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
+      window.dispatchEvent(new Event("auth:logout"));
       set({
         token: null,
         isAuthenticated: false,

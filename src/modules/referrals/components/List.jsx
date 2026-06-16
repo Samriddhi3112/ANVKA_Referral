@@ -57,14 +57,14 @@ const List = ({ serviceType, page = 1, setPage }) => {
                 No Records Found
               </h5>
 
-              <p
+              {/* <p
                 style={{
                   color: "#777",
                   marginBottom: 0,
                 }}
               >
                 No consultation records available for the selected filters.
-              </p>
+              </p> */}
             </div>
           </div>
         )}

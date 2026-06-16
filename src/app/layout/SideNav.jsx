@@ -8,6 +8,7 @@ import referredTreatIcon from "../../assets/images/referred-treatment.svg";
 import referrelearnings from "../../assets/images/referrel-earnings.svg";
 import staticContent from "../../assets/images/Frame.png"
 import { useLocation } from "react-router-dom";
+import {FiTarget , FiUsers } from "react-icons/fi";
 
 const Sidenav = () => {
   const location = useLocation();
@@ -31,7 +32,7 @@ const Sidenav = () => {
         <li className={isActive(["/leads"]) ? "active" : ""}>
           <NavLink to="/leads">
             <span>
-              <img src={patients} alt="Patients" />
+              <FiTarget alt="Patients" />
             </span>
             Lead Management
           </NavLink>
@@ -40,7 +41,7 @@ const Sidenav = () => {
         <li className={isActive(["/registered-patients"]) ? "active" : ""}>
           <NavLink to="/registered-patients">
             <span>
-              <img src={patients} alt="Patients" />
+              <FiUsers alt="Patients" />
             </span>
             Registered Patient
           </NavLink>
@@ -57,14 +58,14 @@ const Sidenav = () => {
           </NavLink>
         </li>
 
-        <li className={isExactActive("/referrals/care") ? "active" : ""}>
+        {/* <li className={isExactActive("/referrals/care") ? "active" : ""}>
           <NavLink to="/referrals/care">
             <span>
               <img src={postarrivalIcon} alt="" />
             </span>
             Post Arrival Care
           </NavLink>
-        </li>
+        </li> */}
 
         <li className={isExactActive("/referrals/profile") ? "active" : ""}>
           <NavLink to="/referrals/profile">
