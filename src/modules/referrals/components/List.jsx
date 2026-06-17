@@ -2,18 +2,17 @@ import React, { useState } from "react";
 import ListRow from "./ListRow";
 import DetailsModal from "./DetailsModal";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { useConsultationsStore } from "../../referralConsultation/store/consultations.store";
 
-const List = ({ serviceType, page = 1, setPage }) => {
+const List = ({ serviceType, page = 1, setPage, store = {} }) => {
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
   const {
-    consultations,
-    total,
-    limit,
-    loading,
-  } = useConsultationsStore();
+    consultations = [],
+    total = 0,
+    limit = 20,
+    loading = false,
+  } = store;
 
   const totalPages = Math.ceil(total / limit);
 
@@ -35,36 +34,20 @@ const List = ({ serviceType, page = 1, setPage }) => {
       <div className="row gy-4">
         {consultations?.length > 0 ? (
           consultations.map((item) => (
-            <div className="col-lg-4" key={item._id}>
-              <ListRow
-                data={item}
-                onClick={() => handleOpen(item)}
-              />
+            <div className="col-lg-4" key={item.consultationId || item._id}>
+              <ListRow data={item} onClick={() => handleOpen(item)} />
             </div>
           ))
         ) : (
           <div className="col-12">
-            <div
-              style={{
-                textAlign: "center",
-                padding: "50px 20px",
-                background: "#fff",
-                borderRadius: "12px",
-                border: "1px dashed #d9d9d9",
-              }}
-            >
-              <h5 style={{ marginBottom: "10px" }}>
-                No Records Found
-              </h5>
-
-              {/* <p
-                style={{
-                  color: "#777",
-                  marginBottom: 0,
-                }}
-              >
-                No consultation records available for the selected filters.
-              </p> */}
+            <div style={{
+              textAlign: "center",
+              padding: "50px 20px",
+              background: "#fff",
+              borderRadius: "12px",
+              border: "1px dashed #d9d9d9",
+            }}>
+              <h5 style={{ marginBottom: "10px" }}>No Records Found</h5>
             </div>
           </div>
         )}
@@ -73,24 +56,18 @@ const List = ({ serviceType, page = 1, setPage }) => {
       {totalPages > 1 && (
         <div className="Paginations">
           <label>&nbsp;</label>
-
           <ul>
-            {Array.from(
-              { length: totalPages },
-              (_, index) => index + 1
-            ).map((pageNo) => (
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNo) => (
               <li key={pageNo}>
-                <a
+                <button
                   className={page === pageNo ? "active" : ""}
                   onClick={() => setPage(pageNo)}
-                  style={{ cursor: "pointer" }}
                 >
                   {pageNo}
-                </a>
+                </button>
               </li>
             ))}
           </ul>
-
           <button
             className="nextBtn"
             disabled={page === totalPages}

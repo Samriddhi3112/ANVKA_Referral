@@ -5,6 +5,36 @@ import List from "../components/List";
 import { referralConfig } from "../utils/referralConfig";
 import { useConsultationsStore } from "../../referralConsultation/store/consultations.store";
 
+// ─── Map serviceType to its store ─────────────────────────────────────────
+// Jab baaki APIs ready hon, unka store yahan add karo
+const useStoreByType = (type) => {
+  const consultationsStore = useConsultationsStore();
+
+  switch (type) {
+    case "consultation":
+      return consultationsStore;
+
+    // Jab APIs ready hon:
+    // case "treatment":
+    //   return useTreatmentStore();
+    // case "profile":
+    //   return useProfileStore();
+    // case "care":
+    //   return useCareStore();
+
+    default:
+      // Baaki types ke liye empty state return karo — koi data nahi dikhega
+      return {
+        consultations: [],
+        total: 0,
+        page: 1,
+        limit: 20,
+        loading: false,
+        getConsultations: async () => {},
+      };
+  }
+};
+
 const ReferralPage = () => {
   const { type } = useParams();
   const config = referralConfig[type];
@@ -13,22 +43,20 @@ const ReferralPage = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const { getConsultations } = useConsultationsStore();
+  const store = useStoreByType(type);
 
   useEffect(() => {
-    console.log({
-      startDate,
-      endDate,
-      page,
-    });
-
-    getConsultations({
-      startDate,
-      endDate,
-      page,
-      limit: 20,
-    });
-  }, [startDate, endDate, page]);
+    // Sirf consultation type pe API call hogi
+    // Baaki types ke liye empty store return hoga
+    if (store.getConsultations) {
+      store.getConsultations({
+        startDate,
+        endDate,
+        page,
+        limit: 20,
+      });
+    }
+  }, [type, startDate, endDate, page]);
 
   const handleResetFilters = () => {
     setStartDate("");
@@ -40,7 +68,7 @@ const ReferralPage = () => {
     <div className="WrapperArea">
       <div className="WrapperBox">
         <div className="TitleBox">
-          <h4 className="Title">{config.title}</h4>
+          <h4 className="Title">{config?.title}</h4>
 
           <Filters
             startDate={startDate}
@@ -51,7 +79,12 @@ const ReferralPage = () => {
           />
         </div>
 
-        <List serviceType={config.service} page={page} setPage={setPage} />
+        <List
+          serviceType={config?.service}
+          page={page}
+          setPage={setPage}
+          store={store}
+        />
       </div>
     </div>
   );

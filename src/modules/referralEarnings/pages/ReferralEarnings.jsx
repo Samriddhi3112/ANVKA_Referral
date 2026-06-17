@@ -175,8 +175,13 @@ const ReferralEarnings = () => {
   }, []);
 
   useEffect(() => {
-    const type = activeTab === "first" ? "payment_history" : "my_earning";
-    getEarnings(type, 1, filterType);
+    if (activeTab === "first") {
+      // Payment History — type null, sab data aayega
+      getEarnings("payment_history", 1, "");
+    } else {
+      // My Earning — filterType se filter hoga
+      getEarnings("my_earning", 1, filterType);
+    }
   }, [activeTab, filterType]);
 
   const handleTabSelect = (key) => {
@@ -186,39 +191,47 @@ const ReferralEarnings = () => {
   };
 
   const handlePageChange = (page) => {
-    const type = activeTab === "first" ? "payment_history" : "my_earning";
-    getEarnings(type, page, filterType);
+    if (activeTab === "first") {
+      getEarnings("payment_history", page, "");
+    } else {
+      getEarnings("my_earning", page, filterType);
+    }
   };
 
-  const renderList = (colorClass, prefix) => {
+  const renderList = (colorClass) => {
     if (loading) return <p className="text-center py-3">Loading...</p>;
     if (!earnings?.length)
       return <p className="text-center py-3">No records found.</p>;
 
     return (
       <ul>
-        {earnings.map((item, index) => (
-          <li key={index} className={colorClass}>
-            <span>
-              <img src={cart} alt="img" />
-            </span>
-            <figcaption>
-              <h5>{item.name || "—"}</h5>
-              <p>
-                <small>#{item.orderId || item._id}</small>
-                <small>
-                  {item.date
-                    ? new Date(item.date).toLocaleDateString("en-IN")
-                    : "—"}
-                </small>
-              </p>
-            </figcaption>
-            <h6>
-              {prefix}
-              {wallet?.currency} {item.amount?.toFixed(2)}
-            </h6>
-          </li>
-        ))}
+        {earnings.map((item, index) => {
+          const isDebit = item.type === "withdrawal" || item.type === "reversal";
+          const prefix = isDebit ? "-" : "+";
+          const amountClass = isDebit ? "red" : "green";
+
+          return (
+            <li key={index} className={amountClass}>
+              <span>
+                <img src={cart} alt="img" />
+              </span>
+              <figcaption>
+                <h5>{item.description || item.type || "—"}</h5>
+                <p>
+                  <small>#{item._id?.slice(-8).toUpperCase()}</small>
+                  <small>
+                    {item.createdAt
+                      ? new Date(item.createdAt).toLocaleDateString("en-IN")
+                      : "—"}
+                  </small>
+                </p>
+              </figcaption>
+              <h6>
+                {prefix}{wallet?.currency} {item.amount?.toFixed(2)}
+              </h6>
+            </li>
+          );
+        })}
       </ul>
     );
   };
@@ -280,12 +293,8 @@ const ReferralEarnings = () => {
               <div className="lastTransactions">
                 <div className="header">
                   <h4>Last Transaction</h4>
-                  <FilterDropdown
-                    selectedType={filterType}
-                    onSelect={setFilterType}
-                  />
                 </div>
-                {renderList("green", "+")}
+                {renderList()}
               </div>
 
               <Pagination
@@ -303,7 +312,8 @@ const ReferralEarnings = () => {
                   <div className="advisorBox">
                     <p>Advisor Service Fee</p>
                     <h3>
-                      {wallet ? `${wallet.withdrawalFeePercent ?? 0}%` : "—"}
+                      {"—"}
+                      {/* {wallet ? `${wallet.withdrawalFeePercent ?? 0}%` : "—"} */}
                     </h3>
                   </div>
                 </div>
@@ -322,7 +332,7 @@ const ReferralEarnings = () => {
                 </div>
               </div>
 
-              <Link className="withdrawBtn" to="/referral-earnings/withdraw-money">
+              <Link className="withdrawBtn" to="/registered-patients/withdraw-money">
                 Withdraw Money
               </Link>
 
@@ -334,7 +344,7 @@ const ReferralEarnings = () => {
                     onSelect={setFilterType}
                   />
                 </div>
-                {renderList("red", "-")}
+                {renderList()}
               </div>
 
               <Pagination

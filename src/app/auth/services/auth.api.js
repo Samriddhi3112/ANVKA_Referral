@@ -40,7 +40,7 @@ export const uploadProfileImageApi = async (file) => {
   const formData = new FormData();
   formData.append("file", file);
 
-  return fetch("http://43.204.250.254:5005/api/v1/upload-file", {
+  return fetch("https://mobulousdev.co.in/anvka/api/v1/upload-file", {
     method: "POST",
     body: formData,
   }).then((res) => res.json());

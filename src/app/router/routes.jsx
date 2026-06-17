@@ -49,6 +49,7 @@ import WithdrawMoney from "../../modules/referralEarnings/withdrawals/pages/With
 import StaticContent from "../../modules/staticContent/pages/staticContent";
 import LeadDetail from "../../modules/leads/pages/leadsDetail";
 import LeadsListing from "../../modules/leads/pages/leadsListing";
+import PatientDetailPage from "../../modules/registeredPatient/pages/PatientDetailPage";
 
 const AppRoutes = () => {
   return (
@@ -82,6 +83,7 @@ const AppRoutes = () => {
           <Route path="/referral-earnings/withdraw-money" element={<WithdrawMoney />} />
           <Route path="/leads" element={<LeadsListing />} />
           <Route path="/leads/:id" element={<LeadDetail />} />
+          <Route path="/registered-patients/:leadId" element={<PatientDetailPage />} />
         </Route>
       </Route>
 

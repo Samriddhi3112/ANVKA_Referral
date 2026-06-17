@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Modal from 'react-bootstrap/Modal';
-import fundSuccessImg from '../../../../assets/images/fundsuccess.svg';
-import { useWithdrawalsStore } from '../../withdrawals/store/withdrawals.store';
-import { useWalletStore } from '../../wallet/store/wallet.store';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Modal from "react-bootstrap/Modal";
+import fundSuccessImg from "../../../../assets/images/fundsuccess.svg";
+import { useWithdrawalsStore } from "../../withdrawals/store/withdrawals.store";
+import { useWalletStore } from "../../wallet/store/wallet.store";
 
 const WithdrawMoney = () => {
-  const [amount, setAmount] = useState('');
-  const [amountError, setAmountError] = useState('');
-  const [transactionId, setTransactionId] = useState('');
+  const [amount, setAmount] = useState("");
+  const [amountError, setAmountError] = useState("");
+  const [transactionId, setTransactionId] = useState("");
   const [fundSuccess, setFundSuccess] = useState(false);
 
   const { createWithdrawal, loading } = useWithdrawalsStore();
@@ -21,28 +21,33 @@ const WithdrawMoney = () => {
   const handleContinue = async () => {
     // Validation
     if (!amount || isNaN(amount) || Number(amount) <= 0) {
-      setAmountError('Please enter a valid amount.');
+      setAmountError("Please enter a valid amount.");
       return;
     }
     if (wallet?.available !== undefined && Number(amount) > wallet.available) {
-      setAmountError('Amount exceeds available balance.');
+      setAmountError("Amount exceeds available balance.");
       return;
     }
-    setAmountError('');
+    setAmountError("");
 
     try {
       const res = await createWithdrawal({ amount: Number(amount) });
-      setTransactionId(res?.data?.transactionId || res?.data?._id || '—');
+      setTransactionId(res?.data?.transactionId || res?.data?._id || "—");
       setFundSuccess(true);
     } catch (err) {
-      setAmountError(err?.response?.data?.message || 'Withdrawal failed. Please try again.');
+      const errorMessage =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Withdrawal failed. Please try again.";
+
+      setAmountError(errorMessage);
     }
   };
 
   const handleClose = () => {
     setFundSuccess(false);
-    setAmount('');
-    setTransactionId('');
+    setAmount("");
+    setTransactionId("");
   };
 
   return (
@@ -55,8 +60,8 @@ const WithdrawMoney = () => {
               <p className="mb-0">Total Earning</p>
               <h2>
                 {wallet
-                  ? `${wallet.currency} ${wallet.totalEarned?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
-                  : '—'}
+                  ? `${wallet.currency} ${wallet.totalEarned?.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`
+                  : "—"}
               </h2>
             </div>
           </div>
@@ -65,8 +70,8 @@ const WithdrawMoney = () => {
             <p>Available Balance</p>
             <h3>
               {wallet
-                ? `${wallet.currency} ${wallet.available?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
-                : '—'}
+                ? `${wallet.currency} ${wallet.available?.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`
+                : "—"}
             </h3>
           </div>
 
@@ -75,17 +80,24 @@ const WithdrawMoney = () => {
               <h6>Add Amount</h6>
               <input
                 type="number"
-                className={`form-control ${amountError ? 'is-invalid' : ''}`}
+                className={`form-control ${amountError ? "is-invalid" : ""}`}
                 value={amount}
                 onChange={(e) => {
                   setAmount(e.target.value);
-                  if (amountError) setAmountError('');
+                  if (amountError) setAmountError("");
                 }}
                 placeholder="Enter amount"
                 min="1"
               />
               {amountError && (
-                <div className="invalid-feedback d-block" style={{ fontSize: '13px', color: '#dc3545', marginTop: '5px' }}>
+                <div
+                  className="invalid-feedback d-block"
+                  style={{
+                    fontSize: "13px",
+                    color: "#dc3545",
+                    marginTop: "5px",
+                  }}
+                >
                   {amountError}
                 </div>
               )}
@@ -95,9 +107,12 @@ const WithdrawMoney = () => {
               className="withdrawBtn"
               onClick={handleContinue}
               disabled={loading}
-              style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+              style={{
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
             >
-              {loading ? 'Processing...' : 'Continue'}
+              {loading ? "Processing..." : "Continue"}
             </button>
           </div>
         </div>
@@ -106,13 +121,20 @@ const WithdrawMoney = () => {
       <Modal show={fundSuccess} onHide={handleClose}>
         <Modal.Body>
           <div className="fundSuccessFullyArea">
-            <span><img src={fundSuccessImg} alt="img" /></span>
+            <span>
+              <img src={fundSuccessImg} alt="img" />
+            </span>
             <h4>Withdrawal Successfully</h4>
             <p>
-              #Transaction ID: {transactionId}<br />
+              #Transaction ID: {transactionId}
+              <br />
               Your payment will be processed within 24–48 hours.
             </p>
-            <Link className="homeBtn" onClick={handleClose} to="/referral-earnings">
+            <Link
+              className="homeBtn"
+              onClick={handleClose}
+              to="/referral-earnings"
+            >
               Home
             </Link>
           </div>
