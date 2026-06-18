@@ -9,3 +9,9 @@ export const getEarningsApi = (type, page = 1, filterType = "") => {
   if (filterType) params.type = filterType; 
   return axiosInstance.get("/referral/wallet/earnings", { params });
 };
+
+export const getTransactionsApi = (page = 1, filterType = "") => {
+  const params = { page };
+  if (filterType) params.type = filterType;
+  return axiosInstance.get("/referral/wallet/transactions", { params });
+};

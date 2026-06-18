@@ -68,7 +68,7 @@ const LoginPage = () => {
   };
 
   const handleOtpLogin = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     if (!validatePhone()) return;
 
     const phoneNumberOnly = getPurePhoneNumber();
@@ -201,10 +201,21 @@ const LoginPage = () => {
                   containerClass="phone-input-container"
                   // style={{ width: "460px" }}
                   inputStyle={{ width: "460px" }}
+                  inputProps={{
+                    onKeyDown: (e) => {
+                      if (e.key === "Enter") {
+                        handleOtpLogin(e);
+                      }
+                    },
+                  }}
                 />
 
                 <div className="footer-login-pad">
-                  <button  type="submit" className="btn-colored" disabled={loading}>
+                  <button
+                    type="submit"
+                    className="btn-colored"
+                    disabled={loading}
+                  >
                     {loading ? "Sending OTP..." : "Login"}
                   </button>
                 </div>
@@ -252,7 +263,11 @@ const LoginPage = () => {
                 </div>
 
                 <div className="footer-login-pad">
-                  <button  type="submit" className="btn-colored" disabled={loading}>
+                  <button
+                    type="submit"
+                    className="btn-colored"
+                    disabled={loading}
+                  >
                     {loading ? "Logging in..." : "Login"}
                   </button>
                 </div>

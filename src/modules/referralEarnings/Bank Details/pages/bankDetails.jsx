@@ -1,8 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useBankDetailsStore } from "../store/bankDetails.store"; // adjust path
+import { useBankDetailsStore } from "../store/bankDetails.store";
 import { saveBankDetailsApi } from "../services/bankDetails.api";
 import toast from "react-hot-toast";
+
+// ─── Masking helpers ──────────────────────────────────────────────────────────
+const maskAccountNumber = (val) => {
+  if (!val) return "";
+  if (val.length <= 4) return val;
+  return "*".repeat(val.length - 4) + val.slice(-4);
+};
+
+const maskIfsc = (val) => {
+  if (!val) return "";
+  if (val.length <= 4) return val;
+  return val.slice(0, 4) + "*".repeat(val.length - 4);
+};
 
 const BankDetails = () => {
   const { getBankDetails, loading } = useBankDetailsStore();
@@ -15,13 +28,16 @@ const BankDetails = () => {
     upiId: "",
   });
 
-  // FETCH DATA ON LOAD
+  // Track which fields are focused (show actual value) vs blurred (show masked)
+  const [focused, setFocused] = useState({
+    accountNumber: false,
+    ifsc: false,
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await getBankDetails();
-
       const data = res?.data?.bankDetails || res?.bankDetails;
-
       if (data) {
         setForm({
           accountHolderName: data.accountHolderName || "",
@@ -32,49 +48,35 @@ const BankDetails = () => {
         });
       }
     };
-
     fetchData();
   }, []);
 
-  // INPUT CHANGE
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // UPDATE API
-const handleUpdate = async () => {
-  try {
-    // BASIC VALIDATION
-    const hasBank =
-      form.accountNumber && form.ifsc;
+  const handleFocus = (field) =>
+    setFocused((prev) => ({ ...prev, [field]: true }));
 
-    const hasUpi = form.upiId;
+  const handleBlur = (field) =>
+    setFocused((prev) => ({ ...prev, [field]: false }));
 
-    if (!hasBank && !hasUpi) {
-      toast.error(
-        "Please provide either Account Number + IFSC OR UPI ID"
-      );
-      return;
+  const handleUpdate = async () => {
+    try {
+      const hasBank = form.accountNumber && form.ifsc;
+      const hasUpi = form.upiId;
+
+      if (!hasBank && !hasUpi) {
+        toast.error("Please provide either Account Number + IFSC OR UPI ID");
+        return;
+      }
+
+      const res = await saveBankDetailsApi({ bankDetails: form });
+      toast.success(res?.data?.message || "Bank details saved successfully");
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to save bank details");
     }
-
-    const res = await saveBankDetailsApi({
-      bankDetails: form,
-    });
-
-    const message =
-      res?.data?.message || "Bank details saved successfully";
-
-    toast.success(message);
-  } catch (err) {
-    console.log(err);
-
-    const errorMessage =
-      err?.response?.data?.message ||
-      "Failed to save bank details";
-
-    toast.error(errorMessage);
-  }
-};
+  };
 
   return (
     <>
@@ -96,8 +98,14 @@ const handleUpdate = async () => {
                       name="accountNumber"
                       className="form-control"
                       placeholder="Enter account number"
-                      value={form.accountNumber}
+                      value={
+                        focused.accountNumber
+                          ? form.accountNumber
+                          : maskAccountNumber(form.accountNumber)
+                      }
                       onChange={handleChange}
+                      onFocus={() => handleFocus("accountNumber")}
+                      onBlur={() => handleBlur("accountNumber")}
                     />
                   </div>
                 </div>
@@ -124,8 +132,14 @@ const handleUpdate = async () => {
                       name="ifsc"
                       className="form-control"
                       placeholder="Enter IFSC"
-                      value={form.ifsc}
+                      value={
+                        focused.ifsc
+                          ? form.ifsc
+                          : maskIfsc(form.ifsc)
+                      }
                       onChange={handleChange}
+                      onFocus={() => handleFocus("ifsc")}
+                      onBlur={() => handleBlur("ifsc")}
                     />
                   </div>
                 </div>

@@ -3,8 +3,11 @@ import filter from "../../../assets/images/filter.svg";
 
 const TransactionList = ({ title, type }) => {
   return (
+
     <div className="lastTransactions">
+
       <div className="header">
+        <h2>hiiiiiiiiiiiiiii</h2>
         <h4>{title}</h4>
         <button className="filterBtn">
           <img src={filter} alt="" /> Filter

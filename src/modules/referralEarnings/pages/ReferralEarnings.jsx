@@ -89,7 +89,6 @@ const FilterDropdown = ({ selectedType, onSelect }) => {
           borderRadius: "8px",
           cursor: "pointer",
           whiteSpace: "nowrap",
-          transition: "border-color 0.15s",
         }}
       >
         {selectedLabel}
@@ -122,10 +121,7 @@ const FilterDropdown = ({ selectedType, onSelect }) => {
           {FILTER_OPTIONS.map((opt) => (
             <li
               key={opt.value}
-              onClick={() => {
-                onSelect(opt.value);
-                setOpen(false);
-              }}
+              onClick={() => { onSelect(opt.value); setOpen(false); }}
               style={{
                 padding: "8px 12px",
                 borderRadius: "7px",
@@ -133,18 +129,10 @@ const FilterDropdown = ({ selectedType, onSelect }) => {
                 fontSize: "13px",
                 fontWeight: selectedType === opt.value ? "500" : "400",
                 color: selectedType === opt.value ? "#d97b3a" : "#444",
-                background:
-                  selectedType === opt.value ? "#FEF4EB" : "transparent",
-                transition: "background 0.12s",
+                background: selectedType === opt.value ? "#FEF4EB" : "transparent",
               }}
-              onMouseEnter={(e) => {
-                if (selectedType !== opt.value)
-                  e.currentTarget.style.background = "#f5f5f5";
-              }}
-              onMouseLeave={(e) => {
-                if (selectedType !== opt.value)
-                  e.currentTarget.style.background = "transparent";
-              }}
+              onMouseEnter={(e) => { if (selectedType !== opt.value) e.currentTarget.style.background = "#f5f5f5"; }}
+              onMouseLeave={(e) => { if (selectedType !== opt.value) e.currentTarget.style.background = "transparent"; }}
             >
               {opt.label}
             </li>
@@ -159,49 +147,85 @@ const FilterDropdown = ({ selectedType, onSelect }) => {
 const ReferralEarnings = () => {
   const {
     wallet,
-    earnings,
-    earningsMeta,
+    earnings, earningsMeta,
+    transactions, transactionsMeta,
     loading,
-    getWallet,
-    getEarnings,
-    clearEarnings,
+    getWallet, getEarnings, getTransactions, clearEarnings,
   } = useWalletStore();
 
   const [activeTab, setActiveTab] = useState("first");
-  const [filterType, setFilterType] = useState("");
+  const [filterType, setFilterType] = useState("");     // My Earning filter
+  const [txFilterType, setTxFilterType] = useState(""); // Payment History filter
 
   useEffect(() => {
     getWallet();
+    getTransactions(1, "");
   }, []);
 
   useEffect(() => {
-    if (activeTab === "first") {
-      // Payment History — type null, sab data aayega
-      getEarnings("payment_history", 1, "");
-    } else {
-      // My Earning — filterType se filter hoga
+    if (activeTab === "second") {
       getEarnings("my_earning", 1, filterType);
     }
   }, [activeTab, filterType]);
 
+  useEffect(() => {
+    if (activeTab === "first") {
+      getTransactions(1, txFilterType);
+    }
+  }, [txFilterType]);
+
   const handleTabSelect = (key) => {
     clearEarnings();
     setFilterType("");
+    setTxFilterType("");
     setActiveTab(key);
+    if (key === "first") getTransactions(1, "");
+    if (key === "second") getEarnings("my_earning", 1, "");
   };
 
   const handlePageChange = (page) => {
     if (activeTab === "first") {
-      getEarnings("payment_history", page, "");
+      getTransactions(page, txFilterType);
     } else {
       getEarnings("my_earning", page, filterType);
     }
   };
 
-  const renderList = (colorClass) => {
+  const renderTransactions = () => {
     if (loading) return <p className="text-center py-3">Loading...</p>;
-    if (!earnings?.length)
-      return <p className="text-center py-3">No records found.</p>;
+    if (!transactions?.length) return <p className="text-center py-3">No records found.</p>;
+
+    return (
+      <ul>
+        {transactions.map((item, index) => {
+          const isDebit = item.label === "Withdrawal";
+          const prefix = isDebit ? "-" : "+";
+          const amountClass = isDebit ? "red" : "green";
+
+          return (
+            <li key={index} className={amountClass}>
+              <span><img src={cart} alt="img" /></span>
+              <figcaption>
+                <h5>{item.description || item.label || "—"}</h5>
+                <p>
+                  {/* <small>#{item.id?.slice(-8).toUpperCase()}</small> */}
+                  <small>
+                    {item.date ? new Date(item.date).toLocaleDateString("en-IN") : "—"}
+                  </small>
+                </p>
+              </figcaption>
+              <h6>{prefix}{wallet?.currency} {item.amount?.toFixed(2)}</h6>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  };
+
+  // ─── Earnings list (My Earning) ────────────────────────────────────────────
+  const renderEarnings = () => {
+    if (loading) return <p className="text-center py-3">Loading...</p>;
+    if (!earnings?.length) return <p className="text-center py-3">No records found.</p>;
 
     return (
       <ul>
@@ -212,23 +236,17 @@ const ReferralEarnings = () => {
 
           return (
             <li key={index} className={amountClass}>
-              <span>
-                <img src={cart} alt="img" />
-              </span>
+              <span><img src={cart} alt="img" /></span>
               <figcaption>
                 <h5>{item.description || item.type || "—"}</h5>
                 <p>
-                  <small>#{item._id?.slice(-8).toUpperCase()}</small>
+                  {/* <small>#{item._id?.slice(-8).toUpperCase()}</small> */}
                   <small>
-                    {item.createdAt
-                      ? new Date(item.createdAt).toLocaleDateString("en-IN")
-                      : "—"}
+                    {item.createdAt ? new Date(item.createdAt).toLocaleDateString("en-IN") : "—"}
                   </small>
                 </p>
               </figcaption>
-              <h6>
-                {prefix}{wallet?.currency} {item.amount?.toFixed(2)}
-              </h6>
+              <h6>{prefix}{wallet?.currency} {item.amount?.toFixed(2)}</h6>
             </li>
           );
         })}
@@ -245,39 +263,26 @@ const ReferralEarnings = () => {
             <p className="mb-0">Total Earning</p>
             <h2>
               {wallet
-                ? `${wallet.currency} ${wallet.totalEarned?.toLocaleString(
-                    "en-IN",
-                    { minimumFractionDigits: 2 }
-                  )}`
-                : loading
-                ? "Loading..."
-                : "—"}
+                ? `${wallet.currency} ${wallet.totalEarned?.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`
+                : loading ? "Loading..." : "—"}
             </h2>
           </div>
         </div>
 
-        <Tab.Container
-          id="left-tabs-example"
-          defaultActiveKey="first"
-          onSelect={handleTabSelect}
-        >
+        <Tab.Container id="left-tabs-example" defaultActiveKey="first" onSelect={handleTabSelect}>
           <div className="commonTabs">
             <Nav fill>
               <Nav.Item>
-                <Nav.Link as={Link} to="#" eventKey="first">
-                  Payment History
-                </Nav.Link>
+                <Nav.Link as={Link} to="#" eventKey="first">Payment History</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link as={Link} to="#" eventKey="second">
-                  My Earning
-                </Nav.Link>
+                <Nav.Link as={Link} to="#" eventKey="second">My Earning</Nav.Link>
               </Nav.Item>
             </Nav>
           </div>
 
           <Tab.Content>
-            {/* Payment History */}
+            {/* ─── Payment History ─── */}
             <Tab.Pane eventKey="first">
               <Link to="/referral-earnings/bank-details">
                 <div className="bankDetailsBox">
@@ -293,28 +298,26 @@ const ReferralEarnings = () => {
               <div className="lastTransactions">
                 <div className="header">
                   <h4>Last Transaction</h4>
+                  <FilterDropdown selectedType={txFilterType} onSelect={setTxFilterType} />
                 </div>
-                {renderList()}
+                {renderTransactions()}
               </div>
 
               <Pagination
-                currentPage={earningsMeta.page}
-                total={earningsMeta.total}
-                limit={earningsMeta.limit}
+                currentPage={transactionsMeta.page}
+                total={transactionsMeta.total}
+                limit={transactionsMeta.limit}
                 onPageChange={handlePageChange}
               />
             </Tab.Pane>
 
-            {/* My Earning */}
+            {/* ─── My Earning ─── */}
             <Tab.Pane eventKey="second">
               <div className="row">
                 <div className="col-lg-6">
                   <div className="advisorBox">
                     <p>Advisor Service Fee</p>
-                    <h3>
-                      {"—"}
-                      {/* {wallet ? `${wallet.withdrawalFeePercent ?? 0}%` : "—"} */}
-                    </h3>
+                    <h3>{"—"}</h3>
                   </div>
                 </div>
                 <div className="col-lg-6">
@@ -322,29 +325,23 @@ const ReferralEarnings = () => {
                     <p>Available Balance</p>
                     <h3>
                       {wallet
-                        ? `${wallet.currency} ${wallet.available?.toLocaleString(
-                            "en-IN",
-                            { minimumFractionDigits: 2 }
-                          )}`
+                        ? `${wallet.currency} ${wallet.available?.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`
                         : "—"}
                     </h3>
                   </div>
                 </div>
               </div>
 
-              <Link className="withdrawBtn" to="/registered-patients/withdraw-money">
+              <Link className="withdrawBtn" to="/referral-earnings/withdraw-money">
                 Withdraw Money
               </Link>
 
               <div className="lastTransactions">
                 <div className="header">
                   <h4>Earnings Summary</h4>
-                  <FilterDropdown
-                    selectedType={filterType}
-                    onSelect={setFilterType}
-                  />
+                  <FilterDropdown selectedType={filterType} onSelect={setFilterType} />
                 </div>
-                {renderList()}
+                {renderEarnings()}
               </div>
 
               <Pagination
