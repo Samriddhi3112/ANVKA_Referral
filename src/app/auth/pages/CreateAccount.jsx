@@ -45,53 +45,48 @@ const CreateAccount = () => {
   };
 
   const validate = () => {
-    if (!form.fullName.trim()) {
-      toast.error("Full name is required");
-      return false;
-    }
+  if (!form.fullName.trim()) {
+    toast.error("Full name is required");
+    return false;
+  }
 
-    if (!form.phone) {
-      toast.error("Phone number is required");
-      return false;
-    }
+  if (!form.phone || !/^\d{7,15}$/.test(form.phone)) {
+    toast.error("Enter a valid phone number");
+    return false;
+  }
 
-    if (!/^\d{7,15}$/.test(form.phone)) {
-      toast.error("Enter a valid phone number");
-      return false;
-    }
+  if (!form.email) {
+    toast.error("Email is required");
+    return false;
+  }
 
-    if (!form.email) {
-      toast.error("Email is required");
-      return false;
-    }
+  if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+    toast.error("Invalid email address");
+    return false;
+  }
 
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) {
-      toast.error("Invalid email address");
-      return false;
-    }
+  if (!form.password) {
+    toast.error("Password is required");
+    return false;
+  }
 
-    if (!form.password) {
-      toast.error("Password is required");
-      return false;
-    }
+  if (form.password.length < 6) {
+    toast.error("Password must be at least 6 characters");
+    return false;
+  }
 
-    if (form.password.length < 6) {
-      toast.error("Password must be at least 6 characters");
-      return false;
-    }
+  if (form.password !== form.confirmPassword) {
+    toast.error("Passwords do not match");
+    return false;
+  }
 
-    if (form.password !== form.confirmPassword) {
-      toast.error("Passwords do not match");
-      return false;
-    }
+  if (!form.agree) {
+    toast.error("Please accept Terms & Conditions");
+    return false;
+  }
 
-    if (!form.agree) {
-      toast.error("Please accept Terms & Conditions");
-      return false;
-    }
-
-    return true;
-  };
+  return true;
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();

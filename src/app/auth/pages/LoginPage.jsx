@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
@@ -100,6 +100,19 @@ const LoginPage = () => {
       );
     }
   };
+
+  useEffect(() => {
+  const handlePopState = () => {
+    window.history.pushState(null, "", window.location.href);
+  };
+
+  window.history.pushState(null, "", window.location.href);
+  window.addEventListener("popstate", handlePopState);
+
+  return () => {
+    window.removeEventListener("popstate", handlePopState);
+  };
+}, []);
 
   // const handleOtpLogin = async (e) => {
   //   e.preventDefault();

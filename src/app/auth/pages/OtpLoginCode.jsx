@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate , Navigate} from "react-router-dom";
 import OtpInput from "react-otp-input";
 import toast from "react-hot-toast";
 import { FaChevronLeft } from "react-icons/fa6";
@@ -12,7 +12,12 @@ import CircularProgress from "../../../shared/components/CircularProgress";
 const OtpLoginCode = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  if (!location.state?.phoneOrEmail || !location.state?.countryCode) {
+  return <Navigate to="/" replace />;
+}
   const { devOtp, verifyLoginOtp, requestLoginOtp, loading } = useAuthStore();
+
+  
 
   useEffect(() => {
     if (devOtp) {

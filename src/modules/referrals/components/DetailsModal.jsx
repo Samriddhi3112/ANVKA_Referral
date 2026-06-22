@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { IoClose } from "react-icons/io5";
-import { BsCalendar3, BsCircle, BsCurrencyDollar } from "react-icons/bs";
+import { BsCalendar3, BsCircle, BsWallet } from "react-icons/bs";
 import consultProfile from "../../../assets/images/consultation-profile.png";
 
 const formatDate = (dateStr) => {
@@ -100,7 +100,7 @@ const DetailsModal = ({ show, onClose, data }) => {
           {/* Amount Paid */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", color: "#6b7280", fontSize: "14px" }}>
-              <BsCurrencyDollar style={{ color: "#9ca3af", fontSize: "16px" }} />
+              <BsWallet style={{ color: "#9ca3af", fontSize: "16px" }} />
               Amount Paid
             </div>
             <span style={{ fontWeight: "600", fontSize: "15px", color: "#111827" }}>

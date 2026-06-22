@@ -145,7 +145,9 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
       setErrors({});
       onSuccess();
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Failed to add lead.");
+      const message =
+        err?.message || err?.response?.data?.message || "Failed to add lead.";
+      toast.error(message);
     }
   };
 
@@ -156,7 +158,12 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered dialogClassName="addLeadModal">
+    <Modal
+      show={show}
+      onHide={handleClose}
+      centered
+      dialogClassName="addLeadModal"
+    >
       <Modal.Body>
         <div className="commonForm p-2">
           <h4 className="Title mb-3">Add Lead</h4>
@@ -164,7 +171,9 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
           <form onSubmit={handleSubmit}>
             {/* Full Name */}
             <div className="form-group">
-              <h6>Full Name <sup style={{ color: "#fc3636" }}>*</sup></h6>
+              <h6>
+                Full Name <sup style={{ color: "#fc3636" }}>*</sup>
+              </h6>
               <input
                 type="text"
                 name="fullName"
@@ -174,7 +183,13 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
                 placeholder="Enter full name"
               />
               {errors.fullName && (
-                <div style={{ fontSize: "13px", color: "#dc3545", marginTop: "4px" }}>
+                <div
+                  style={{
+                    fontSize: "13px",
+                    color: "#dc3545",
+                    marginTop: "4px",
+                  }}
+                >
                   {errors.fullName}
                 </div>
               )}
@@ -193,11 +208,17 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
                 countryCodeEditable={false}
                 inputClass={`form-control${errors.phone ? " is-invalid" : ""}`}
                 containerClass="phone-input-container"
-                containerStyle={{ width: "100%", }}
+                containerStyle={{ width: "100%" }}
                 placeholder="Enter phone number"
               />
               {errors.phone && (
-                <div style={{ fontSize: "13px", color: "#dc3545", marginTop: "4px" }}>
+                <div
+                  style={{
+                    fontSize: "13px",
+                    color: "#dc3545",
+                    marginTop: "4px",
+                  }}
+                >
                   {errors.phone}
                 </div>
               )}
@@ -205,7 +226,9 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
 
             {/* Email */}
             <div className="form-group">
-              <h6>Email <sup style={{ color: "#fc3636" }}>*</sup></h6>
+              <h6>
+                Email <sup style={{ color: "#fc3636" }}>*</sup>
+              </h6>
               <input
                 type="email"
                 name="email"
@@ -215,7 +238,13 @@ const AddLeadModal = ({ show, onClose, onSuccess }) => {
                 placeholder="Enter email address"
               />
               {errors.email && (
-                <div style={{ fontSize: "13px", color: "#dc3545", marginTop: "4px" }}>
+                <div
+                  style={{
+                    fontSize: "13px",
+                    color: "#dc3545",
+                    marginTop: "4px",
+                  }}
+                >
                   {errors.email}
                 </div>
               )}
@@ -302,20 +331,30 @@ const LeadsListing = () => {
                     {leads.map((lead) => (
                       <tr key={lead.id}>
                         <td>{lead.fullName}</td>
-                        <td>{lead.countryCode} {lead.phone}</td>
+                        <td>
+                          {lead.countryCode} {lead.phone}
+                        </td>
                         <td>{lead.email}</td>
                         <td>{lead.referralCode}</td>
-                        <td><StatusBadge status={lead.status} /></td>
+                        <td>
+                          <StatusBadge status={lead.status} />
+                        </td>
                         <td>
                           {lead.createdAt
-                            ? new Date(lead.createdAt).toLocaleDateString("en-IN")
+                            ? new Date(lead.createdAt).toLocaleDateString(
+                                "en-IN",
+                              )
                             : "—"}
                         </td>
                         <td>
                           <button
                             className="filterBtn"
                             onClick={() => navigate(`/leads/${lead.id}`)}
-                            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "6px",
+                            }}
                           >
                             View <MdKeyboardArrowRight />
                           </button>

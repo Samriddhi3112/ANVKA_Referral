@@ -62,7 +62,7 @@ const UserProfile = () => {
       await logout();
       setShow(false);
       toast.success("Logged out successfully.");
-      navigate("/",{ replace: true });
+      window.location.replace("/ANVKA/referral/");
     } catch (err) {
       console.error("Logout failed:", err);
       toast.error("Logout failed");

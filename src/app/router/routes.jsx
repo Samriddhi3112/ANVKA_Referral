@@ -50,12 +50,25 @@ import StaticContent from "../../modules/staticContent/pages/staticContent";
 import LeadDetail from "../../modules/leads/pages/leadsDetail";
 import LeadsListing from "../../modules/leads/pages/leadsListing";
 import PatientDetailPage from "../../modules/registeredPatient/pages/PatientDetailPage";
+import PublicRoute from "./PublicRoute";
 
 const AppRoutes = () => {
   return (
     <Routes>
       {/* Public / Auth Routes */}
-      <Route path="/" element={<LoginPage />} />
+      <Route
+        path="/"
+        element={
+          sessionStorage.getItem("token") ? (
+            <Navigate
+              to={sessionStorage.getItem("lastRoute") || "/overview"}
+              replace
+            />
+          ) : (
+            <LoginPage />
+          )
+        }
+      />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/otp-login" element={<OtpLoginCode />} />
       <Route path="/verify-code" element={<VerifyCode />} />
@@ -78,12 +91,21 @@ const AppRoutes = () => {
             element={<EditFacilitatorInformation />}
           />
           <Route path="/referral-earnings" element={<ReferralEarnings />} />
-          <Route path="/referral-earnings/bank-details" element={<BankDetails />} />
+          <Route
+            path="/referral-earnings/bank-details"
+            element={<BankDetails />}
+          />
           <Route path="/static-content" element={<StaticContent />} />
-          <Route path="/referral-earnings/withdraw-money" element={<WithdrawMoney />} />
+          <Route
+            path="/referral-earnings/withdraw-money"
+            element={<WithdrawMoney />}
+          />
           <Route path="/leads" element={<LeadsListing />} />
           <Route path="/leads/:id" element={<LeadDetail />} />
-          <Route path="/registered-patients/:leadId" element={<PatientDetailPage />} />
+          <Route
+            path="/registered-patients/:leadId"
+            element={<PatientDetailPage />}
+          />
         </Route>
       </Route>
 
