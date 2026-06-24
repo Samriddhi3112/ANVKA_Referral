@@ -94,25 +94,33 @@ const LoginPage = () => {
         },
       });
     } catch (err) {
-      toast.error(
-        err?.response?.data?.message ||
-          "Number not registered. Please sign up first.",
-      );
+      console.log("OTP Error =>", err);
+      console.log("Response =>", err?.response?.data);
+
+      const message = err?.response?.data?.message || err?.message;
+
+      if (message === "Account is not active") {
+        toast.error(
+          "Your account is currently inactive. Please contact the administrator.",
+        );
+      } else {
+        toast.error("Number not registered. Please sign up first.");
+      }
     }
   };
 
   useEffect(() => {
-  const handlePopState = () => {
+    const handlePopState = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+
     window.history.pushState(null, "", window.location.href);
-  };
+    window.addEventListener("popstate", handlePopState);
 
-  window.history.pushState(null, "", window.location.href);
-  window.addEventListener("popstate", handlePopState);
-
-  return () => {
-    window.removeEventListener("popstate", handlePopState);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   // const handleOtpLogin = async (e) => {
   //   e.preventDefault();

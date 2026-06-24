@@ -45,7 +45,8 @@ const Header = () => {
     "/change-password": "Change Password",
     "/bank-details": "Referral Earnings",
     "/static-content" :"Help & Info",
-    "/leads":"Leads Management"
+    "/leads":"Leads Management",
+    "/referral-earnings/withdraw-money/withdrawal-history":"Referral Earnings"
   };
 
   const getPageTitle = () => {

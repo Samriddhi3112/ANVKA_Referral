@@ -51,6 +51,7 @@ import LeadDetail from "../../modules/leads/pages/leadsDetail";
 import LeadsListing from "../../modules/leads/pages/leadsListing";
 import PatientDetailPage from "../../modules/registeredPatient/pages/PatientDetailPage";
 import PublicRoute from "./PublicRoute";
+import WithdrawalHistory from "../../modules/referralEarnings/withdrawals/pages/WithdrawalHistory";
 
 const AppRoutes = () => {
   return (
@@ -102,6 +103,7 @@ const AppRoutes = () => {
           />
           <Route path="/leads" element={<LeadsListing />} />
           <Route path="/leads/:id" element={<LeadDetail />} />
+          <Route path="/referral-earnings/withdraw-money/withdrawal-history" element={<WithdrawalHistory />} />
           <Route
             path="/registered-patients/:leadId"
             element={<PatientDetailPage />}

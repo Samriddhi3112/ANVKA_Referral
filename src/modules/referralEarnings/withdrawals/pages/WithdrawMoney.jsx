@@ -19,20 +19,34 @@ const WithdrawMoney = () => {
   }, []);
 
   const handleContinue = async () => {
-    // Validation
     if (!amount || isNaN(amount) || Number(amount) <= 0) {
       setAmountError("Please enter a valid amount.");
       return;
     }
-    if (wallet?.available !== undefined && Number(amount) > wallet.available) {
+
+    if (
+      wallet?.available !== undefined &&
+      Number(amount) > wallet.available
+    ) {
       setAmountError("Amount exceeds available balance.");
       return;
     }
+
     setAmountError("");
 
     try {
-      const res = await createWithdrawal({ amount: Number(amount) });
-      setTransactionId(res?.data?.transactionId || res?.data?._id || "—");
+      const res = await createWithdrawal({
+        amount: Number(amount),
+      });
+
+      await getWallet();
+
+      setTransactionId(
+        res?.data?.transactionId ||
+          res?.data?._id ||
+          "—"
+      );
+
       setFundSuccess(true);
     } catch (err) {
       const errorMessage =
@@ -56,11 +70,15 @@ const WithdrawMoney = () => {
         <div className="WrapperBox">
           <div className="TitleBox">
             <h4 className="Title">My Balance</h4>
+
             <div className="totalEarning">
               <p className="mb-0">Total Earning</p>
               <h2>
                 {wallet
-                  ? `${wallet.currency} ${wallet.totalEarned?.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`
+                  ? `${wallet.currency} ${wallet.totalEarned?.toLocaleString(
+                      "en-IN",
+                      { minimumFractionDigits: 2 }
+                    )}`
                   : "—"}
               </h2>
             </div>
@@ -70,31 +88,49 @@ const WithdrawMoney = () => {
             <p>Available Balance</p>
             <h3>
               {wallet
-                ? `${wallet.currency} ${wallet.available?.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`
+                ? `${wallet.currency} ${wallet.available?.toLocaleString(
+                    "en-IN",
+                    { minimumFractionDigits: 2 }
+                  )}`
                 : "—"}
             </h3>
           </div>
 
           <div className="commonForm">
             <div className="form-group">
-              <h6>Add Amount</h6>
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <h6 className="mb-0">Withdraw Amount</h6>
+
+                <Link
+                  to="/referral-earnings/withdraw-money/withdrawal-history"
+                  className="withdrawHistoryBtn btn btn-sm"
+                >
+                  View Withdrawal History
+                </Link>
+              </div>
+
               <input
                 type="number"
-                className={`form-control ${amountError ? "is-invalid" : ""}`}
+                className={`form-control ${
+                  amountError ? "is-invalid" : ""
+                }`}
                 value={amount}
                 onChange={(e) => {
                   setAmount(e.target.value);
-                  if (amountError) setAmountError("");
+
+                  if (amountError) {
+                    setAmountError("");
+                  }
                 }}
                 placeholder="Enter amount"
                 min="1"
               />
+
               {amountError && (
                 <div
                   className="invalid-feedback d-block"
                   style={{
                     fontSize: "13px",
-                    color: "#dc3545",
                     marginTop: "5px",
                   }}
                 >
@@ -107,10 +143,6 @@ const WithdrawMoney = () => {
               className="withdrawBtn"
               onClick={handleContinue}
               disabled={loading}
-              style={{
-                opacity: loading ? 0.7 : 1,
-                cursor: loading ? "not-allowed" : "pointer",
-              }}
             >
               {loading ? "Processing..." : "Continue"}
             </button>
@@ -124,12 +156,16 @@ const WithdrawMoney = () => {
             <span>
               <img src={fundSuccessImg} alt="img" />
             </span>
+
             <h4>Withdrawal Successfully</h4>
+
             <p>
               #Transaction ID: {transactionId}
               <br />
-              Your payment will be processed within 24–48 hours.
+              Your payment will be processed within 24–48
+              hours.
             </p>
+
             <Link
               className="homeBtn"
               onClick={handleClose}

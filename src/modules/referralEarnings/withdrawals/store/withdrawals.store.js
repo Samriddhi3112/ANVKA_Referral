@@ -6,6 +6,9 @@ import {
 
 export const useWithdrawalsStore = create((set) => ({
   withdrawals: [],
+  total: 0,
+  page: 1,
+  limit: 20,
   loading: false,
   error: null,
 
@@ -32,14 +35,17 @@ export const useWithdrawalsStore = create((set) => ({
     }
   },
 
-  getWithdrawals: async () => {
+  getWithdrawals: async (page = 1) => {
     try {
       set({ loading: true, error: null });
 
-      const res = await getWithdrawalsApi();
+      const res = await getWithdrawalsApi(page);
 
       set({
-        withdrawals: res.data?.data || res.data,
+        withdrawals: res?.data?.data?.withdrawals || [],
+        total: res?.data?.data?.total || 0,
+        page: res?.data?.data?.page || 1,
+        limit: res?.data?.data?.limit || 20,
         loading: false,
       });
 
@@ -55,6 +61,7 @@ export const useWithdrawalsStore = create((set) => ({
       throw err;
     }
   },
+
 
   clearWithdrawals: () =>
     set({
