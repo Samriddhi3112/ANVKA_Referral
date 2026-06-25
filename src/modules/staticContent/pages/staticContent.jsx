@@ -12,7 +12,7 @@ const TABS = [
   { key: "privacy", label: "Privacy Policy", type: "privacyPolicy" },
 ];
 
-// ─── Renders content: handles array of FAQ-like objects OR single HTML/text ──
+// ─── Renders content ──────────────────────────────────────────────────────
 const ContentRenderer = ({ content, loading }) => {
   if (loading) return <p className="text-center py-3">Loading...</p>;
 
@@ -20,9 +20,22 @@ const ContentRenderer = ({ content, loading }) => {
     return <p className="text-center py-3">No content available.</p>;
   }
 
-  // Case 1: Array of FAQ-style objects -> render accordion
+  // API returns: data = [ { id, contentFor, type, content: "<html string>" } ]
+  // Extract HTML from first item's content field
   if (Array.isArray(content)) {
-    // If items look like FAQs (have title/question + description/answer)
+    const firstItem = content[0];
+
+    // Case 1: Array of objects with a direct `content` HTML field (current API shape)
+    if (firstItem?.content && typeof firstItem.content === "string") {
+      return (
+        <div
+          className="staticContentArea"
+          dangerouslySetInnerHTML={{ __html: firstItem.content }}
+        />
+      );
+    }
+
+    // Case 2: FAQ-style objects with title/question + description/answer
     const isFaqLike = content.every(
       (item) =>
         typeof item === "object" &&
@@ -34,7 +47,7 @@ const ContentRenderer = ({ content, loading }) => {
       return (
         <Accordion defaultActiveKey="0" className="commonAccordion">
           {content.map((item, index) => (
-            <Accordion.Item eventKey={String(index)} key={item._id || index}>
+            <Accordion.Item eventKey={String(index)} key={item._id || item.id || index}>
               <Accordion.Header>
                 {item.title || item.question}
               </Accordion.Header>
@@ -51,7 +64,7 @@ const ContentRenderer = ({ content, loading }) => {
       );
     }
 
-    // Fallback: array of plain strings or unknown objects
+    // Fallback: plain strings or unknown objects
     return (
       <div className="staticContentArea">
         {content.map((item, index) => (
@@ -65,10 +78,9 @@ const ContentRenderer = ({ content, loading }) => {
     );
   }
 
-  // Case 2: Single object with content/description/html field
+  // Case 3: Single object
   if (typeof content === "object") {
-    const html =
-      content.content || content.description || content.html || "";
+    const html = content.content || content.description || content.html || "";
     return (
       <div
         className="staticContentArea"
@@ -77,7 +89,7 @@ const ContentRenderer = ({ content, loading }) => {
     );
   }
 
-  // Case 3: Plain string (HTML or text)
+  // Case 4: Plain string
   return (
     <div
       className="staticContentArea"

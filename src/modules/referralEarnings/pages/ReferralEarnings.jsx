@@ -154,17 +154,17 @@ const ReferralEarnings = () => {
   } = useWalletStore();
 
   const [activeTab, setActiveTab] = useState("first");
-  const [filterType, setFilterType] = useState("");     // My Earning filter
-  const [txFilterType, setTxFilterType] = useState(""); // Payment History filter
+  const [filterType, setFilterType] = useState("commission");     // My Earning filter
+  const [txFilterType, setTxFilterType] = useState("commission"); // Payment History filter
 
   useEffect(() => {
     getWallet();
-    getTransactions(1, "");
+    getTransactions(1, txFilterType || "commission");
   }, []);
 
   useEffect(() => {
     if (activeTab === "second") {
-      getEarnings("my_earning", 1, filterType);
+      getEarnings("my_earning", 1, filterType|| "commission");
     }
   }, [activeTab, filterType]);
 
@@ -242,7 +242,7 @@ const ReferralEarnings = () => {
                 <p>
                   {/* <small>#{item._id?.slice(-8).toUpperCase()}</small> */}
                   <small>
-                    {item.createdAt ? new Date(item.createdAt).toLocaleDateString("en-IN") : "—"}
+                    {item.date ? new Date(item.date).toLocaleDateString("en-IN") : "—"}
                   </small>
                 </p>
               </figcaption>
@@ -314,12 +314,12 @@ const ReferralEarnings = () => {
             {/* ─── My Earning ─── */}
             <Tab.Pane eventKey="second">
               <div className="row">
-                <div className="col-lg-6">
+                {/* <div className="col-lg-6">
                   <div className="advisorBox">
                     <p>Advisor Service Fee</p>
                     <h3>{"—"}</h3>
                   </div>
-                </div>
+                </div> */}
                 <div className="col-lg-6">
                   <div className="advisorBox">
                     <p>Available Balance</p>

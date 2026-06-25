@@ -48,13 +48,15 @@ const ReferralPage = () => {
   useEffect(() => {
     // Sirf consultation type pe API call hogi
     // Baaki types ke liye empty store return hoga
-    if (store.getConsultations) {
-      store.getConsultations({
-        startDate,
-        endDate,
-        page,
-        limit: 20,
-      });
+    if ((startDate && endDate) || (!startDate && !endDate)) {
+      if (store.getConsultations) {
+        store.getConsultations({
+          startDate,
+          endDate,
+          page,
+          limit: 20,
+        });
+      }
     }
   }, [type, startDate, endDate, page]);
 

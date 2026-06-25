@@ -52,6 +52,7 @@ import LeadsListing from "../../modules/leads/pages/leadsListing";
 import PatientDetailPage from "../../modules/registeredPatient/pages/PatientDetailPage";
 import PublicRoute from "./PublicRoute";
 import WithdrawalHistory from "../../modules/referralEarnings/withdrawals/pages/WithdrawalHistory";
+import ProfileCompletion from "../../modules/profileCompletion/pages/profileCompletion";
 
 const AppRoutes = () => {
   return (
@@ -108,6 +109,7 @@ const AppRoutes = () => {
             path="/registered-patients/:leadId"
             element={<PatientDetailPage />}
           />
+          <Route path="/referrals/profile-completion" element={<ProfileCompletion />} />
         </Route>
       </Route>
 

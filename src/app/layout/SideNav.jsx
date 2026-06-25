@@ -47,7 +47,7 @@ const Sidenav = () => {
           </NavLink>
         </li>
 
-        <li
+        {/* <li
           className={isExactActive("/referrals/consultation") ? "active" : ""}
         >
           <NavLink to="/referrals/consultation">
@@ -56,7 +56,7 @@ const Sidenav = () => {
             </span>
             Referred Consultation
           </NavLink>
-        </li>
+        </li> */}
 
         {/* <li className={isExactActive("/referrals/care") ? "active" : ""}>
           <NavLink to="/referrals/care">
@@ -67,8 +67,8 @@ const Sidenav = () => {
           </NavLink>
         </li> */}
 
-        <li className={isExactActive("/referrals/profile") ? "active" : ""}>
-          <NavLink to="/referrals/profile">
+        <li className={isExactActive("/referrals/profile-completion") ? "active" : ""}>
+          <NavLink to="/referrals/profile-completion">
             <span>
               <img src={completionIcon} alt="" />
             </span>
@@ -76,14 +76,14 @@ const Sidenav = () => {
           </NavLink>
         </li>
 
-        <li className={isExactActive("/referrals/treatment") ? "active" : ""}>
+        {/* <li className={isExactActive("/referrals/treatment") ? "active" : ""}>
           <NavLink to="/referrals/treatment">
             <span>
               <img src={referredTreatIcon} alt="" />
             </span>
             Referred Treatment
           </NavLink>
-        </li>
+        </li> */}
 
         <li
           className={

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { BsDownload, BsCalendar3 } from "react-icons/bs";
-import { IoRefresh } from "react-icons/io5";
+import { LuRefreshCw } from "react-icons/lu";
 
 const PageHeader = ({ startDate, endDate, setStartDate, setEndDate }) => {
   const startRef = useRef(null);
@@ -61,7 +61,9 @@ const PageHeader = ({ startDate, endDate, setStartDate, setEndDate }) => {
             minWidth: "180px",
           }}
         >
-          <BsCalendar3 style={{ color: "#ff7a00", fontSize: "16px", flexShrink: 0 }} />
+          <BsCalendar3
+            style={{ color: "#ff7a00", fontSize: "16px", flexShrink: 0 }}
+          />
 
           <span
             style={{
@@ -78,6 +80,7 @@ const PageHeader = ({ startDate, endDate, setStartDate, setEndDate }) => {
             ref={startRef}
             type="date"
             value={startDate}
+            max={endDate || undefined}
             onChange={(e) => setStartDate(e.target.value)}
             style={{
               position: "absolute",
@@ -111,7 +114,9 @@ const PageHeader = ({ startDate, endDate, setStartDate, setEndDate }) => {
             minWidth: "180px",
           }}
         >
-          <BsCalendar3 style={{ color: "#ff7a00", fontSize: "16px", flexShrink: 0 }} />
+          <BsCalendar3
+            style={{ color: "#ff7a00", fontSize: "16px", flexShrink: 0 }}
+          />
 
           <span
             style={{
@@ -128,7 +133,7 @@ const PageHeader = ({ startDate, endDate, setStartDate, setEndDate }) => {
             ref={endRef}
             type="date"
             value={endDate}
-            min={startDate}
+            min={startDate || undefined}
             onChange={(e) => setEndDate(e.target.value)}
             style={{
               position: "absolute",
@@ -144,28 +149,14 @@ const PageHeader = ({ startDate, endDate, setStartDate, setEndDate }) => {
         </div>
 
         {/* Reset Button */}
-        <div
-          onClick={handleResetFilters}
-          title="Reset Filters"
-          style={{
-            width: "42px",
-            height: "42px",
-            border: "1px solid rgba(229, 231, 235, 1)",
-            borderRadius: "8px",
-            background: "#fff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            flexShrink: 0,
-          }}
-        >
-          <IoRefresh
-            style={{
-              color: "#ff7a00",
-              fontSize: "20px",
-            }}
-          />
+        <div className="form-group" style={{margin:"0px"}}>
+          <button
+            className="refreshBtn"
+            onClick={handleResetFilters}
+            title="Reset filters"
+          >
+            <LuRefreshCw />
+          </button>
         </div>
 
         {/* Download Button */}

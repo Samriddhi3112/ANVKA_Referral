@@ -19,23 +19,55 @@ const WithdrawalHistory = () => {
 
   const totalPages = Math.ceil(total / limit);
 
-  const maskAccountNumber = (accountNumber = "") => {
-    if (accountNumber.length <= 4) return accountNumber;
-    return `XXXX XXXX ${accountNumber.slice(-4)}`;
-  };
+  const maskAccountNumber = (accountNumber) => {
+  if (!accountNumber) return "-";
 
-  const maskIFSC = (ifsc = "") => {
-    if (ifsc.length <= 4) return ifsc;
-    return `${ifsc.slice(0, 4)}XXXX`;
-  };
+  const value = String(accountNumber);
 
-  const maskUpi = (upi = "") => {
-    if (!upi.includes("@")) return upi;
+  return value.length <= 4
+    ? value
+    : `XXXX XXXX ${value.slice(-4)}`;
+};
 
-    const [name, domain] = upi.split("@");
+const maskIFSC = (ifsc) => {
+  if (!ifsc) return "-";
 
-    return `${name.slice(0, 2)}****@${domain}`;
-  };
+  const value = String(ifsc);
+
+  return value.length <= 4
+    ? value
+    : `${value.slice(0, 4)}XXXX`;
+};
+
+const maskUpi = (upi) => {
+  if (!upi) return "-";
+
+  const value = String(upi);
+
+  if (!value.includes("@")) return value;
+
+  const [name, domain] = value.split("@");
+
+  return `${name.slice(0, 2)}****@${domain}`;
+};
+
+  // const maskAccountNumber = (accountNumber = "") => {
+  //   if (accountNumber.length <= 4) return accountNumber;
+  //   return `XXXX XXXX ${accountNumber.slice(-4)}`;
+  // };
+
+  // const maskIFSC = (ifsc = "") => {
+  //   if (ifsc.length <= 4) return ifsc;
+  //   return `${ifsc.slice(0, 4)}XXXX`;
+  // };
+
+  // const maskUpi = (upi = "") => {
+  //   if (!upi.includes("@")) return upi;
+
+  //   const [name, domain] = upi.split("@");
+
+  //   return `${name.slice(0, 2)}****@${domain}`;
+  // };
 
   return (
     <div className="WrapperArea">

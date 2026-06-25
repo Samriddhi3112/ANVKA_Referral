@@ -13,6 +13,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { IoChevronDown } from "react-icons/io5";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { LuRefreshCw } from "react-icons/lu";
 const OverviewPage = () => {
   const { dashboard, getDashboard, loading } = useDashboardStore();
   const [startDate, setStartDate] = useState("");
@@ -90,12 +91,14 @@ const OverviewPage = () => {
               </div>
 
               {/* Reset Button */}
-              <div
-                className="resetFilterBtn"
-                onClick={handleResetDates}
-                title="Reset Filters"
-              >
-                <IoRefresh className="resetIcon" />
+              <div className="form-group" style={{margin:"0px"}}>
+                <button
+                  className="refreshBtn"
+                  onClick={handleResetDates}
+                  title="Reset filters"
+                >
+                  <LuRefreshCw />
+                </button>
               </div>
             </div>
           </div>
@@ -126,7 +129,7 @@ const OverviewPage = () => {
             </div>
           </div>
 
-          <div className="col-lg-4">
+          {/* <div className="col-lg-4">
             <div className="dashboardBox three">
               <span>
                 <img src={dashboard2} alt="img" />
@@ -138,8 +141,8 @@ const OverviewPage = () => {
 
               <p>Referred Consultation</p>
             </div>
-          </div>
-
+          </div> */}
+{/* 
           <div className="col-lg-4">
             <div className="dashboardBox four">
               <span>
@@ -150,7 +153,7 @@ const OverviewPage = () => {
 
               <p>Referred Treatments</p>
             </div>
-          </div>
+          </div> */}
 
           {/* <div className="col-lg-4">
             <div className="dashboardBox five">

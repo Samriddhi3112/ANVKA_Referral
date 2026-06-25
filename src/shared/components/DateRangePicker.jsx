@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { IoRefresh } from "react-icons/io5";
 import { BsCalendar3 } from "react-icons/bs";
+import { LuRefreshCw } from "react-icons/lu";
 
 const DateRangePicker = ({
   startDate,
@@ -51,7 +52,9 @@ const DateRangePicker = ({
           minWidth: "180px",
         }}
       >
-        <BsCalendar3 style={{ color: "#ff7a00", fontSize: "16px", flexShrink: 0 }} />
+        <BsCalendar3
+          style={{ color: "#ff7a00", fontSize: "16px", flexShrink: 0 }}
+        />
 
         <span
           style={{
@@ -101,7 +104,9 @@ const DateRangePicker = ({
           minWidth: "180px",
         }}
       >
-        <BsCalendar3 style={{ color: "#ff7a00", fontSize: "16px", flexShrink: 0 }} />
+        <BsCalendar3
+          style={{ color: "#ff7a00", fontSize: "16px", flexShrink: 0 }}
+        />
 
         <span
           style={{
@@ -134,28 +139,10 @@ const DateRangePicker = ({
       </div>
 
       {/* Reset Button */}
-      <div
-        onClick={onReset}
-        title="Reset Filters"
-        style={{
-          width: "42px",
-          height: "42px",
-          border: "1px solid rgba(229, 231, 235, 1)",
-          borderRadius: "8px",
-          background: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          flexShrink: 0,
-        }}
-      >
-        <IoRefresh
-          style={{
-            color: "#ff7a00",
-            fontSize: "20px",
-          }}
-        />
+      <div className="form-group" style={{margin:"0px"}}>
+        <button className="refreshBtn" onClick={onReset} title="Reset filters">
+          <LuRefreshCw />
+        </button>
       </div>
     </div>
   );
